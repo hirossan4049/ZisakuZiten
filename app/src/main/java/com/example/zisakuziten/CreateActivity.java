@@ -26,11 +26,13 @@ public class CreateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
+        //open realm
+        realm = Realm.getDefaultInstance();
+
+
 
         titleText   = (EditText)findViewById(R.id.titleText);
         contentText = (EditText)findViewById(R.id.contentText);
-        //open realm
-        realm = Realm.getDefaultInstance();
     }
 
     //app close ,realm close
