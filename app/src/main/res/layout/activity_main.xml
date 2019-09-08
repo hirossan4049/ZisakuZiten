@@ -33,6 +33,7 @@
             android:layout_margin="16dp"
             android:layout_gravity="bottom|right"
             android:src="@drawable/ic_edit"
+            android:onClick="create"
             app:fabSize="normal"
 
             />
