@@ -7,11 +7,11 @@
     tools:context=".MainActivity">
 
     <!--toolbar-->
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>
+    <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/toolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>-->
 
 
     <FrameLayout
@@ -27,18 +27,18 @@
 
         </ListView>
 
-        <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="70dp"-->
-            <!--android:layout_gravity="bottom|right"-->
-            <!--android:src="@drawable/ic_edit"-->
-            <!--app:fabSize="normal"-->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_gravity="bottom|right"
+            android:src="@drawable/ic_edit"
+            app:fabSize="normal"
 
-            <!--/>-->
+            />
 
 
-    </FrameLayout>
+
     <!--<com.google.android.material.bottomappbar.BottomAppBar-->
         <!--android:id="@+id/bottom_app_bar"-->
         <!--android:layout_width="match_parent"-->
@@ -61,7 +61,8 @@
         android:layout_height="56dp"
         android:layout_gravity="bottom"
         app:backgroundTint="#008577"
-        app:fabAlignmentMode="end">
+        app:fabAlignmentMode="end"
+        tools:ignore="BottomAppBar">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
@@ -73,12 +74,12 @@
 
     </com.google.android.material.bottomappbar.BottomAppBar>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_edit"
-        app:layout_anchor="@id/bottom_app_bar" />
-
+    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
+        <!--android:id="@+id/fab"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@drawable/ic_edit"-->
+        <!--app:layout_anchor="@id/bottom_app_bar" />-->
+    </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
