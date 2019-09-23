@@ -19,6 +19,14 @@
         android:hint="content"
         android:inputType="textPersonName" />
 
+<!--    <me.originqiu.library.EditTag-->
+<!--        android:id="@+id/edit_tag_view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="48dp"-->
+<!--        android:delete_mode_bg="#FF4081"-->
+<!--        android:input_layout="@layout/view_sample_input_tag"-->
+<!--        android:tag_layout="@layout/view_sample_tag" />-->
+
     <Button
         android:id="@+id/add"
         android:layout_width="match_parent"
