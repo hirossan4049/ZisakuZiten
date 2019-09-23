@@ -1,10 +1,13 @@
 package com.example.zisakuziten;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -60,22 +63,34 @@ public class CreateActivity extends AppCompatActivity {
     public void create(View view){
         //titleを取得
         String title = titleText.getText().toString();
-
-        //Date
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.JAPANESE);
-        String updateDate = sdf.format(date);
-
         //contentを取得
         String content = contentText.getText().toString();
+
+
+        if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
+            Context context = getApplicationContext();
+            Toast.makeText(context, "トーストメッセージ", Toast.LENGTH_LONG).show();
+        }
+        else {
+
+            //Date
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.JAPANESE);
+            String updateDate = sdf.format(date);
+
+
 //      check!
-        check(title,updateDate,content);
+            check(title, updateDate, content);
 
-        //save
-        save(title,updateDate,content);
-        finish();
+            //save
+            save(title, updateDate, content);
 
+            Log.d("正常","正常にRealmに保存されました、");
+            Context context = getApplicationContext();
+            Toast.makeText(context, "保存成功！", Toast.LENGTH_LONG).show();
+            finish();
 
+        }
     }
 
 
