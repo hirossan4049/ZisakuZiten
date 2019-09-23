@@ -2,10 +2,13 @@ package com.example.zisakuziten;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -34,9 +37,10 @@ public class MainActivity extends AppCompatActivity {
         RealmResults<Ziten> results = realm.where(Ziten.class).findAll();
         List<Ziten> items = realm.copyFromRealm(results);
 
-        ZitenAdapter adapter = new ZitenAdapter(this,R.layout.home_item,items);
+
+        ZitenAdapter adapter = new ZitenAdapter(this, R.layout.home_item, items);
         listView.setAdapter(adapter);
-//        Log.d("REALM_ListView_text",adapter+"");
+
     }
 
 

@@ -32,8 +32,6 @@ public class CreateActivity extends AppCompatActivity {
         //open realm
         realm = Realm.getDefaultInstance();
 
-
-
         titleText   = (EditText)findViewById(R.id.titleText);
         contentText = (EditText)findViewById(R.id.contentText);
     }
@@ -67,11 +65,16 @@ public class CreateActivity extends AppCompatActivity {
         String content = contentText.getText().toString();
 
 
-        if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(content)) {
+
+
+        //null判定
+        if(title.length() <= 1) {
             Context context = getApplicationContext();
-            Toast.makeText(context, "トーストメッセージ", Toast.LENGTH_LONG).show();
-        }
-        else {
+            Toast.makeText(context, "タイトルは2文字以上入力してくれ！", Toast.LENGTH_SHORT).show();
+        }else if(content.length() <= 1){
+            Context context = getApplicationContext();
+            Toast.makeText(context,"コンテンツは２文字以上入力してね!",Toast.LENGTH_SHORT).show();
+        }else {
 
             //Date
             Date date = new Date();
