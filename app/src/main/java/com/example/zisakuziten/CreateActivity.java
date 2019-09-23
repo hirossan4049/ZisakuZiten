@@ -57,6 +57,44 @@ public class CreateActivity extends AppCompatActivity {
     }
 
 
+    public void create(View view){
+        //titleを取得
+        String title = titleText.getText().toString();
+
+        //Date
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.JAPANESE);
+        String updateDate = sdf.format(date);
+
+        //contentを取得
+        String content = contentText.getText().toString();
+//      check!
+        check(title,updateDate,content);
+
+        //save
+        save(title,updateDate,content);
+        finish();
+
+
+    }
+
+
+
+
+    public void check(String title,String updateDate,String content){
+        Ziten ziten = new Ziten();
+
+        ziten.title      = title;
+        ziten.updateTime = updateDate;
+        ziten.content    = content;
+
+        Log.d("Ziten_title",ziten.title);
+        Log.d("Ziten_update",ziten.updateTime);
+        Log.d("Ziten_content",ziten.content);
+
+    }
+
+
 
     public void add(View v){
         //title and content を取得
