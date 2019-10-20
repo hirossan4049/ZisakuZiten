@@ -114,6 +114,8 @@ public class CreateActivity extends AppCompatActivity {
 
 
 
+
+
     public void add(View v){
         //title and content を取得
         String title = titleText.getText().toString();

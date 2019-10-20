@@ -6,11 +6,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -19,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     public Realm realm;
     public ListView listView;
+//    public Button quiz_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +33,56 @@ public class MainActivity extends AppCompatActivity {
 
         //openRealm
         realm = Realm.getDefaultInstance();
-        listView = findViewById(R.id.listView);
+        listView = (ListView)findViewById(R.id.listView);
+//        quiz_button = (Button)findViewById(R.id.quiz_button);
+
+        //clickで編集
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("test","test!!!!!!!!!!!!!!!!!!!!!!!!!");
+                Ziten ziten = (Ziten) parent.getItemAtPosition(position);
+                Intent intent = new Intent(MainActivity.this,DetailActivity.class);
+                intent.putExtra("updateTime",ziten.updateTime);
+
+                startActivity(intent);
+//                switch (view.getId()) {
+//                    case R.id.checkBox:
+//                        break;
+//                    default:
+//                        startActivity(intent);
+//                        break;
+//                }
+            }
+
+        });
     }
+
+    // メニューを作成する
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_menu, menu);
+        return true;
+    }
+
+    // メニューアイテム選択イベント（メニューが選択された時に呼ばれる）
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item1:
+                // ここに設定ボタンがタップされた時に実行する処理を追加する
+                break;
+            case R.id.item2:
+                break;
+            case R.id.item3:
+                // 終了ボタンがタップされた時の処理
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 
 
 
@@ -61,5 +115,6 @@ public class MainActivity extends AppCompatActivity {
     public void create(View view){
         Intent intent = new Intent(this,CreateActivity.class);
         startActivity(intent);
+
     }
 }

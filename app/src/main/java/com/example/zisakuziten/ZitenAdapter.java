@@ -30,13 +30,9 @@ public class ZitenAdapter extends ArrayAdapter<Ziten> {
         if (convertView == null) {
             convertView = layoutinflater.inflate(R.layout.home_item, null);
         }
-        final Ziten ziten1 = getItem(position);
 
         TextView titleText = (TextView) convertView.findViewById(R.id.titleText);
         TextView contentText = (TextView) convertView.findViewById(R.id.contentText);
-//        ImageView imageView = (ImageView) convertView.findViewById(R.id.weatherstatus_imageView);
-//        LinearLayout linearLayout = (LinearLayout) convertView.findViewById(R.id.linearLayout);
-//        CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
 
 
         titleText.setText(ziten.title);
