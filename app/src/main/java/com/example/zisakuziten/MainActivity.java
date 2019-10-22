@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,7 +25,9 @@ public class MainActivity extends AppCompatActivity {
 
     public Realm realm;
     public ListView listView;
+    public CheckBox checkBox;
 //    public Button quiz_button;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         //openRealm
         realm = Realm.getDefaultInstance();
         listView = (ListView)findViewById(R.id.listView);
+        checkBox = (CheckBox) findViewById(R.id.checkBox);
 //        quiz_button = (Button)findViewById(R.id.quiz_button);
 
         //clickで編集
@@ -42,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("test","test!!!!!!!!!!!!!!!!!!!!!!!!!");
                 Ziten ziten = (Ziten) parent.getItemAtPosition(position);
-                Intent intent = new Intent(MainActivity.this,DetailActivity.class);
+                Intent intent = new Intent(getApplicationContext(),DetailActivity.class);
                 intent.putExtra("updateTime",ziten.updateTime);
 
                 startActivity(intent);
@@ -70,7 +74,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item1:
-                // ここに設定ボタンがタップされた時に実行する処理を追加する
+//                checkBox.setVisibility(View.VISIBLE);
+                // ここに設定タンがタップされた時に実行する処理を追加する
                 break;
             case R.id.item2:
                 break;
@@ -117,4 +122,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+
+
 }

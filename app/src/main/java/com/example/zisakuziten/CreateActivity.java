@@ -70,7 +70,7 @@ public class CreateActivity extends AppCompatActivity {
         //null判定
         if(title.length() <= 1) {
             Context context = getApplicationContext();
-            Toast.makeText(context, "タイトルは2文字以上入力してくれ！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "タイトルは2文字以上入力してね！", Toast.LENGTH_SHORT).show();
         }else if(content.length() <= 1){
             Context context = getApplicationContext();
             Toast.makeText(context,"コンテンツは２文字以上入力してね!",Toast.LENGTH_SHORT).show();
