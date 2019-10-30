@@ -3,9 +3,11 @@ package com.example.zisakuziten;
 import android.app.Application;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,6 +25,7 @@ public class QuizActivity extends AppCompatActivity {
     Realm realm;
     public List<Ziten> items;
     public int itemsize;
+    public int answer_int;
     public TextView contentText;
     public TextView titleText_one;
     public TextView titleText_two;
@@ -72,10 +75,58 @@ public class QuizActivity extends AppCompatActivity {
         title_random_list.add(title_three);
         Collections.shuffle(title_random_list);
 
+        for(int i = 0; i < title_random_list.size(); i++){
+            if (answer == title_random_list.get(i)){
+                answer_int = i;
+            }
+
+        }
+        Log.d("answer", String.valueOf(answer_int));
+
         titleText_one.setText(title_random_list.get(0));
         titleText_two.setText(title_random_list.get(1));
         titleText_three.setText(title_random_list.get(2));
         titleText_four.setText(title_random_list.get(3));
+    }
+
+
+    public void titleText_one(View v){
+        if (answer_int == 0){
+            Toast.makeText(this, "正解！", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this, "不正解...", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+    public void titleText_two(View v){
+        if (answer_int == 1){
+            Toast.makeText(this, "正解！", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this, "不正解...", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    public void titleText_three(View v){
+        if (answer_int == 2){
+            Toast.makeText(this, "正解！", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this, "不正解...", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    public void titleText_four(View v){
+        if (answer_int == 3){
+            Toast.makeText(this, "正解！", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(this, "不正解...", Toast.LENGTH_LONG).show();
+
+        }
+    }
+
+    public void next(View v){
+        main();
     }
 
 
