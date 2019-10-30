@@ -19,7 +19,7 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
-        realm = Realm.getDefaultInstance();
+        realm       = Realm.getDefaultInstance();
         titleText   = (EditText)findViewById(R.id.titleText);
         contentText = (EditText)findViewById(R.id.contentText);
         showData();

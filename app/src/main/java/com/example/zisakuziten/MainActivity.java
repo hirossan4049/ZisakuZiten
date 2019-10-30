@@ -1,22 +1,22 @@
 package com.example.zisakuziten;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.app.Fragment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     public Realm realm;
     public ListView listView;
     public CheckBox checkBox;
-//    public Button quiz_button;
+    private BottomNavigationView mBottomNav;
 
 
     @Override
@@ -35,10 +35,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //openRealm
-        realm = Realm.getDefaultInstance();
+        realm    = Realm.getDefaultInstance();
         listView = (ListView)findViewById(R.id.listView);
         checkBox = (CheckBox) findViewById(R.id.checkBox);
-//        quiz_button = (Button)findViewById(R.id.quiz_button);
 
         //clickで編集
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -59,6 +58,16 @@ public class MainActivity extends AppCompatActivity {
 //                }
             }
 
+        });
+
+        // navigation selected, selected switch BUN is selectNavigation function
+        mBottomNav = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
+        mBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                selectNavigation(item);
+                return true;
+            }
         });
     }
 
@@ -84,7 +93,26 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 break;
         }
+
+
         return super.onOptionsItemSelected(item);
+    }
+
+    // navigation view selected
+    private void selectNavigation(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.home:
+                Intent intent = new Intent(this,MainActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.quiz:
+                Intent quiz_intent = new Intent(this,QuizActivity.class);
+                startActivity(quiz_intent);
+                break;
+            case R.id.store:
+                break;
+        }
+
     }
 
 

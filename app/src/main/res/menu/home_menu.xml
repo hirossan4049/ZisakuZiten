@@ -11,8 +11,10 @@
         android:title="Quiz" />
 
     <item
-        android:id="@+id/item3"
+        android:id="@+id/store"
         android:icon="@drawable/ic_store"
         android:title="store"/>
+
+
 
 </menu>

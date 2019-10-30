@@ -32,9 +32,9 @@ public class ZitenAdapter extends ArrayAdapter<Ziten> {
             convertView = layoutinflater.inflate(R.layout.home_item, null);
         }
 
-        TextView titleText = (TextView) convertView.findViewById(R.id.titleText);
+        TextView titleText   = (TextView) convertView.findViewById(R.id.titleText);
         TextView contentText = (TextView) convertView.findViewById(R.id.contentText);
-        CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.checkBox);
+        CheckBox checkBox    = (CheckBox)convertView.findViewById(R.id.checkBox);
         checkBox.setVisibility(View.GONE);
 //        if(position % 2 == 0) {
 //            checkBox.setVisibility(View.GONE);
@@ -48,9 +48,9 @@ public class ZitenAdapter extends ArrayAdapter<Ziten> {
         return convertView;
     }
 
-    public void checkbox_visible(){
-        checkBox.setVisibility(View.VISIBLE);
-    }
+//    public void checkbox_visible(){
+//        checkBox.setVisibility(View.VISIBLE);
+//    }
 
 
 
