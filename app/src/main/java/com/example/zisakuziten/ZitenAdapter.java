@@ -16,7 +16,7 @@ import java.util.List;
 public class ZitenAdapter extends ArrayAdapter<Ziten> {
 
     private LayoutInflater layoutinflater;
-    public CheckBox checkBox;
+//    public CheckBox checkBox;
 
     ZitenAdapter(Context context, int textViewResourceId, List<Ziten> objects) {
         super(context, textViewResourceId, objects);
@@ -34,7 +34,7 @@ public class ZitenAdapter extends ArrayAdapter<Ziten> {
 
         TextView titleText   = (TextView) convertView.findViewById(R.id.titleText);
         TextView contentText = (TextView) convertView.findViewById(R.id.contentText);
-        CheckBox checkBox    = (CheckBox)convertView.findViewById(R.id.checkBox);
+        CheckBox checkBox    = (CheckBox) convertView.findViewById(R.id.checkBox);
         checkBox.setVisibility(View.GONE);
 //        if(position % 2 == 0) {
 //            checkBox.setVisibility(View.GONE);
@@ -51,6 +51,17 @@ public class ZitenAdapter extends ArrayAdapter<Ziten> {
 //    public void checkbox_visible(){
 //        checkBox.setVisibility(View.VISIBLE);
 //    }
+
+    public class checkbox_chenge{
+        public CheckBox checkBox;
+
+        public void setGone(){
+            checkBox.setVisibility(View.GONE);
+        }
+        public void setVISIBLE(){
+            checkBox.setVisibility(View.VISIBLE);
+        }
+    }
 
 
 
