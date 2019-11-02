@@ -9,6 +9,40 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="20dp"
+                android:text="正答率" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="正解数"
+                android:id="@+id/correct_num"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="/" />
+
+            <TextView
+                android:layout_width="57dp"
+                android:layout_height="match_parent"
+                android:text="出題数"
+                android:id="@+id/all_num"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10%"
+                android:id="@+id/parsent_num"/>
+        </LinearLayout>
+
+
         <TextView
             android:id="@+id/content_text"
             android:layout_width="match_parent"
@@ -62,6 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="戻る"
+                android:onClick="exit"
                 android:layout_margin="14dp"/>
 
             <Button
@@ -70,7 +105,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="次！"
+                android:text="次へ！"
                 android:layout_margin="14dp"/>
 
         </LinearLayout>

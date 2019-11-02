@@ -4,6 +4,7 @@ import android.app.Application;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,20 +29,34 @@ public class QuizActivity extends AppCompatActivity {
     public int answer_int;
     public TextView contentText;
     public TextView titleText_one;
-    public TextView titleText_two;
-    public TextView titleText_three;
-    public TextView titleText_four;
+    public Button titleText_two;
+    public Button titleText_three;
+    public Button titleText_four;
+
+    public TextView correct_num;
+    public TextView all_num;
+    public TextView parsent_num;
+    public int correct_number;
+    public int all_number;
+    public int parsent_number;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_main);
-        contentText     = (TextView)findViewById(R.id.content_text);
-        titleText_one   = (TextView)findViewById(R.id.titleText_one);
-        titleText_two   = (TextView)findViewById(R.id.titleText_two);
-        titleText_three = (TextView)findViewById(R.id.titleText_three);
-        titleText_four  = (TextView)findViewById(R.id.titleText_four);
+        contentText     = (TextView) findViewById(R.id.content_text);
+        titleText_one   = (TextView) findViewById(R.id.titleText_one);
+        titleText_two   = (Button) findViewById(R.id.titleText_two);
+        titleText_three = (Button) findViewById(R.id.titleText_three);
+        titleText_four  = (Button) findViewById(R.id.titleText_four);
+
+        correct_num  = (TextView)findViewById(R.id.correct_num);
+        all_num      = (TextView)findViewById(R.id.all_num);
+        parsent_num  = (TextView)findViewById(R.id.parsent_num);
+        correct_number = 0;
+        all_number     = 0;
+        parsent_number = 0;
 
         realm = Realm.getDefaultInstance();
         RealmResults<Ziten> results = realm.where(Ziten.class).findAll();
@@ -89,20 +104,47 @@ public class QuizActivity extends AppCompatActivity {
         titleText_four.setText(title_random_list.get(3));
     }
 
+    public void correct(){
+        all_number     += 1;
+        correct_number += 1;
+        parsent_number  = (correct_number / all_number) * 100;
+
+        correct_num.setText(String.valueOf(correct_number));
+        all_num.setText(String.valueOf(all_number));
+        parsent_num.setText(String.valueOf(parsent_number));
+    }
+    public void incorrect(){
+        all_number += 1;
+        if (correct_number == 0){
+            parsent_number = 0;
+        }else {
+            parsent_number = correct_number / all_number * 100;
+        }
+        all_num.setText(String.valueOf(all_number));
+        parsent_num.setText(String.valueOf(parsent_number));
+
+    }
+
 
     public void titleText_one(View v){
         if (answer_int == 0){
             Toast.makeText(this, "正解！", Toast.LENGTH_SHORT).show();
+            correct();
+            main();
         }else{
             Toast.makeText(this, "不正解...", Toast.LENGTH_SHORT).show();
+            incorrect();
 
         }
     }
     public void titleText_two(View v){
         if (answer_int == 1){
             Toast.makeText(this, "正解！", Toast.LENGTH_SHORT).show();
+            correct();
+            main();
         }else{
             Toast.makeText(this, "不正解...", Toast.LENGTH_SHORT).show();
+            incorrect();
 
         }
     }
@@ -110,8 +152,11 @@ public class QuizActivity extends AppCompatActivity {
     public void titleText_three(View v){
         if (answer_int == 2){
             Toast.makeText(this, "正解！", Toast.LENGTH_SHORT).show();
+            correct();
+            main();
         }else{
             Toast.makeText(this, "不正解...", Toast.LENGTH_SHORT).show();
+            incorrect();
 
         }
     }
@@ -119,14 +164,21 @@ public class QuizActivity extends AppCompatActivity {
     public void titleText_four(View v){
         if (answer_int == 3){
             Toast.makeText(this, "正解！", Toast.LENGTH_LONG).show();
+            correct();
+            main();
         }else{
             Toast.makeText(this, "不正解...", Toast.LENGTH_LONG).show();
-
+            incorrect();
         }
     }
 
     public void next(View v){
         main();
+    }
+
+
+    public void exit(View v){
+        finish();
     }
 
 
