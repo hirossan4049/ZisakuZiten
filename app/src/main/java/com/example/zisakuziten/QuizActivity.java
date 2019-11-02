@@ -111,7 +111,7 @@ public class QuizActivity extends AppCompatActivity {
 
         correct_num.setText(String.valueOf(correct_number));
         all_num.setText(String.valueOf(all_number));
-        parsent_num.setText(String.valueOf(parsent_number+"%"));
+        parsent_num.setText(parsent_number+"%");
     }
     public void incorrect(){
         all_number += 1;
@@ -120,7 +120,7 @@ public class QuizActivity extends AppCompatActivity {
         Log.d("all_number",String.valueOf(all_number));
         Log.d("parsent_number",String.valueOf(parsent_number));
         all_num.setText(String.valueOf(all_number));
-        parsent_num.setText(String.valueOf(parsent_number+"%"));
+        parsent_num.setText(parsent_number+"%");
 
     }
 
