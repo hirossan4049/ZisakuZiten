@@ -38,7 +38,7 @@ public class QuizActivity extends AppCompatActivity {
     public TextView parsent_num;
     public int correct_number;
     public int all_number;
-    public int parsent_number;
+//    public float parsent_number;
 
 
     @Override
@@ -56,7 +56,7 @@ public class QuizActivity extends AppCompatActivity {
         parsent_num  = (TextView)findViewById(R.id.parsent_num);
         correct_number = 0;
         all_number     = 0;
-        parsent_number = 0;
+//        parsent_number = 0;
 
         realm = Realm.getDefaultInstance();
         RealmResults<Ziten> results = realm.where(Ziten.class).findAll();
@@ -107,21 +107,20 @@ public class QuizActivity extends AppCompatActivity {
     public void correct(){
         all_number     += 1;
         correct_number += 1;
-        parsent_number  = (correct_number / all_number) * 100;
+        int parsent_number = (int) Math.floor((float) correct_number/all_number * 100);
 
         correct_num.setText(String.valueOf(correct_number));
         all_num.setText(String.valueOf(all_number));
-        parsent_num.setText(String.valueOf(parsent_number));
+        parsent_num.setText(String.valueOf(parsent_number+"%"));
     }
     public void incorrect(){
         all_number += 1;
-        if (correct_number == 0){
-            parsent_number = 0;
-        }else {
-            parsent_number = correct_number / all_number * 100;
-        }
+        int parsent_number = (int) Math.floor((float) correct_number/all_number * 100);
+        Log.d("correct_number",String.valueOf(correct_number));
+        Log.d("all_number",String.valueOf(all_number));
+        Log.d("parsent_number",String.valueOf(parsent_number));
         all_num.setText(String.valueOf(all_number));
-        parsent_num.setText(String.valueOf(parsent_number));
+        parsent_num.setText(String.valueOf(parsent_number+"%"));
 
     }
 
