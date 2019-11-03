@@ -1,6 +1,7 @@
 package com.example.zisakuziten;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -8,14 +9,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -27,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
     public ListView listView;
     public CheckBox checkBox;
     private BottomNavigationView mBottomNav;
+    public FloatingActionButton action_button;
+    public int checkbox_status;
+    public List<List> checked_list_data;
+    public List<Ziten> checked_list;
 
 
     @Override
@@ -38,17 +48,50 @@ public class MainActivity extends AppCompatActivity {
         realm    = Realm.getDefaultInstance();
         listView = (ListView)findViewById(R.id.listView);
         checkBox = (CheckBox) findViewById(R.id.checkBox);
+        action_button = (FloatingActionButton)findViewById(R.id.action_button);
+        //0 == GONE ,1 == VISIBLE
+        checkbox_status = 0;
+        checked_list = new ArrayList<>();
+//        List<check_list_data> checked_list_data =
+
+
+//        List<List<A>> list = new ArrayList();
+//        List<A> listA = new ArrayList();
+//        listA.add(new A());
+//        list.add(listA);
+
+
+//        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_edit, null);
+//        action_button.setImageDrawable(drawable);
 
         //clickで編集
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("test","test!!!!!!!!!!!!!!!!!!!!!!!!!");
-                Ziten ziten = (Ziten) parent.getItemAtPosition(position);
-                Intent intent = new Intent(getApplicationContext(),DetailActivity.class);
-                intent.putExtra("updateTime",ziten.updateTime);
+                if (checkbox_status == 0) {
+                    Ziten ziten = (Ziten) parent.getItemAtPosition(position);
+                    Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                    intent.putExtra("updateTime", ziten.updateTime);
 
-                startActivity(intent);
+                    startActivity(intent);
+
+                }else if(checkbox_status == 1){
+                    CheckBox checkview = view.findViewById(R.id.checkBox);
+
+                    Ziten ziten = (Ziten)parent.getItemAtPosition(position);
+
+                    if (checkview.isChecked() == true){
+                        checkview.setChecked(false);
+                        checked_list.remove(checked_list.indexOf(ziten));
+                        Log.d(String.valueOf(checked_list),"checkbox false");
+
+                    }else if(checkview.isChecked() == false) {
+                        checkview.setChecked(true);
+                        checked_list.add(ziten);
+                        Log.d(String.valueOf(checked_list),"checkbox true");
+
+                    }
+                }
 //                switch (view.getId()) {
 //                    case R.id.checkBox:
 //                        break;
@@ -84,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.item1:
 //                checkBox.setVisibility(View.VISIBLE);
+                checkbox_status = 1;
+                setMemoList();
                 // ここに設定タンがタップされた時に実行する処理を追加する
                 break;
             case R.id.item2:
@@ -102,8 +147,10 @@ public class MainActivity extends AppCompatActivity {
     private void selectNavigation(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.home:
-                Intent intent = new Intent(this,MainActivity.class);
-                startActivity(intent);
+                checkbox_status = 0;
+                setMemoList();
+//                Intent intent = new Intent(this,MainActivity.class);
+//                startActivity(intent);
                 break;
             case R.id.quiz:
                 Intent quiz_intent = new Intent(this,QuizActivity.class);
@@ -124,17 +171,24 @@ public class MainActivity extends AppCompatActivity {
         RealmResults<Ziten> results = realm.where(Ziten.class).findAll();
         List<Ziten> items = realm.copyFromRealm(results);
 
+        if (checkbox_status == 0){
+            Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_edit, null);
+            action_button.setImageDrawable(drawable);
+        }
+        else if (checkbox_status == 1){
+            Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_delete, null);
+            action_button.setImageDrawable(drawable);
+        }
 
-        ZitenAdapter adapter = new ZitenAdapter(this, R.layout.home_item, items);
+        ZitenAdapter adapter = new ZitenAdapter(this, R.layout.home_item, items,checkbox_status);
         listView.setAdapter(adapter);
-
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-
+        checkbox_status = 0;
         setMemoList();
     }
 
@@ -146,8 +200,42 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void create(View view){
-        Intent intent = new Intent(this,CreateActivity.class);
-        startActivity(intent);
+        if (checkbox_status == 0) {
+            Intent intent = new Intent(this, CreateActivity.class);
+            startActivity(intent);
+        }else if(checkbox_status == 1){
+            delete();
+        }
+    }
+
+    public void delete(){
+
+//        realm.executeTransaction(new Realm.Transaction() {
+//            @Override
+//            public void execute(Realm realm) {
+//
+//                checked_list.forEach(item->
+//                        item.de);
+//
+//            }
+//        });
+//        setMemoList();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                for(int i = 0; i < checked_list.size(); ++i) {
+                     Ziten checked_pice = checked_list.get(i);
+
+//                    Ziten realmZiten = realm.where(Ziten.class).equalTo("updateTime", checked_pice.updateTime).findFirst();
+                    checked_pice.deleteFromRealm();
+                }
+            }
+        });
+
+
+        setMemoList();
+
 
     }
 

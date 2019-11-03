@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--    androidx.coordinatorlayout.widget.CoordinatorLayout-->
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,40 +9,31 @@
 
     <!--toolbar-->
     <!--<android.support.v7.widget.Toolbar-->
-        <!--android:id="@+id/toolbar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>-->
-
+    <!--android:id="@+id/toolbar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>-->
 
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_app_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <ListView
             android:id="@+id/listView"
             android:layout_width="match_parent"
-            android:layout_height="558dp"
+            android:layout_height="match_parent"
             android:textColor="#FF0000">
 
         </ListView>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:layout_gravity="bottom|right"
-            android:src="@drawable/ic_edit"
-            android:onClick="create"
-            app:fabSize="normal"
 
-            />
-
-
-
-    <!--<com.google.android.material.bottomappbar.BottomAppBar-->
+        <!--<com.google.android.material.bottomappbar.BottomAppBar-->
         <!--android:id="@+id/bottom_app_bar"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="56dp"-->
@@ -50,7 +41,7 @@
         <!--app:backgroundTint="@color/colorPrimary"-->
         <!--app:fabAlignmentMode="end" />-->
 
-    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
+        <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
         <!--android:id="@+id/fab"-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
@@ -58,13 +49,38 @@
         <!--app:layout_anchor="@id/bottom_app_bar" />-->
 
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="16dp"
+            android:onClick="create"
+            android:id="@+id/action_button"
+            app:fabSize="normal"
+            />
+<!--            android:src="@drawable/ic_edit"-->
+
+
+
+
+        <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
+        <!--android:id="@+id/fab"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@drawable/ic_edit"-->
+        <!--app:layout_anchor="@id/bottom_app_bar" />-->
+    </FrameLayout>
+
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottom_app_bar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_gravity="bottom"
+        android:layout_marginBottom="1dp"
         app:backgroundTint="#008577"
         app:fabAlignmentMode="end"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         tools:ignore="BottomAppBar">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -77,12 +93,4 @@
 
     </com.google.android.material.bottomappbar.BottomAppBar>
 
-    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
-        <!--android:id="@+id/fab"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:src="@drawable/ic_edit"-->
-        <!--app:layout_anchor="@id/bottom_app_bar" />-->
-    </FrameLayout>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
