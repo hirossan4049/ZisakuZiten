@@ -157,6 +157,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(quiz_intent);
                 break;
             case R.id.store:
+                Intent store_intent = new Intent(this,StoreActivity.class);
+                startActivity(store_intent);
                 break;
         }
 
@@ -226,9 +228,9 @@ public class MainActivity extends AppCompatActivity {
 
                 for(int i = 0; i < checked_list.size(); ++i) {
                      Ziten checked_pice = checked_list.get(i);
-
-//                    Ziten realmZiten = realm.where(Ziten.class).equalTo("updateTime", checked_pice.updateTime).findFirst();
-                    checked_pice.deleteFromRealm();
+                    Ziten realmZiten = realm.where(Ziten.class).equalTo("updateTime", checked_pice.updateTime).findFirst();
+//                    checked_pice.deleteFromRealm();
+                    realmZiten.deleteFromRealm();
                 }
             }
         });
