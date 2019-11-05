@@ -52,17 +52,9 @@ public class MainActivity extends AppCompatActivity {
         //0 == GONE ,1 == VISIBLE
         checkbox_status = 0;
         checked_list = new ArrayList<>();
-//        List<check_list_data> checked_list_data =
 
 
-//        List<List<A>> list = new ArrayList();
-//        List<A> listA = new ArrayList();
-//        listA.add(new A());
-//        list.add(listA);
 
-
-//        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_edit, null);
-//        action_button.setImageDrawable(drawable);
 
         //clickで編集
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -92,13 +84,8 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 }
-//                switch (view.getId()) {
-//                    case R.id.checkBox:
-//                        break;
-//                    default:
-//                        startActivity(intent);
-//                        break;
-//                }
+
+
             }
 
         });
@@ -159,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.store:
                 Intent store_intent = new Intent(this,StoreActivity.class);
                 startActivity(store_intent);
-                Log.d("hello owrld","aaaaaaaaaaaaaaaaaaaaa");
                 break;
         }
 
@@ -212,16 +198,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void delete(){
-
-//        realm.executeTransaction(new Realm.Transaction() {
-//            @Override
-//            public void execute(Realm realm) {
-//
-//                checked_list.forEach(item->
-//                        item.de);
-//
-//            }
-//        });
 //        setMemoList();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
