@@ -10,9 +10,14 @@
         android:icon="@drawable/ic_quiz"
         android:title="Quiz" />
 
+<!--    <item-->
+<!--        android:id="@+id/label"-->
+<!--        android:icon="@drawable/ic_label"-->
+<!--        android:title="slide"/>-->
+
     <item
-        android:id="@+id/item3"
+        android:id="@+id/store"
         android:icon="@drawable/ic_store"
-        android:title="store"/>
+        android:title="Store"/>
 
 </menu>

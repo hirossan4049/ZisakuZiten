@@ -159,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.store:
                 Intent store_intent = new Intent(this,StoreActivity.class);
                 startActivity(store_intent);
+                Log.d("hello owrld","aaaaaaaaaaaaaaaaaaaaa");
                 break;
         }
 

@@ -1,8 +1,10 @@
 package com.example.zisakuziten;
 
 import android.app.Application;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -10,7 +12,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.w3c.dom.Text;
 
@@ -27,6 +32,8 @@ public class QuizActivity extends AppCompatActivity {
     public List<Ziten> items;
     public int itemsize;
     public int answer_int;
+    private BottomNavigationView mBottomNav;
+
     public TextView contentText;
     public TextView titleText_one;
     public Button titleText_two;
@@ -38,6 +45,7 @@ public class QuizActivity extends AppCompatActivity {
     public TextView parsent_num;
     public int correct_number;
     public int all_number;
+
 //    public float parsent_number;
 
 
@@ -64,6 +72,33 @@ public class QuizActivity extends AppCompatActivity {
         itemsize = items.size();
 
         main();
+
+        // navigation selected, selected switch BUN is selectNavigation function
+        mBottomNav = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
+        mBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                selectNavigation(item);
+                return true;
+            }
+        });
+
+    }
+
+
+    // navigation view selected
+    private void selectNavigation(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.home:
+                finish();
+                break;
+            case R.id.quiz:
+                break;
+            case R.id.store:
+                Intent store_intent = new Intent(this,StoreActivity.class);
+                startActivity(store_intent);
+                break;
+        }
 
     }
 
