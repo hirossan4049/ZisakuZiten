@@ -46,6 +46,8 @@ public class QuizActivity extends AppCompatActivity {
     public int correct_number;
     public int all_number;
 
+    public TextView title_zero;
+
 //    public float parsent_number;
 
 
@@ -59,6 +61,8 @@ public class QuizActivity extends AppCompatActivity {
         title_two   = (TextView)findViewById(R.id.title_two);
         title_three = (TextView)findViewById(R.id.title_three);
         title_four  = (TextView)findViewById(R.id.title_four);
+
+//        title_zero = (TextView)findViewById(R.id.title_zero);
 
 //        title_one.setText("hello world");
 
@@ -137,9 +141,11 @@ public class QuizActivity extends AppCompatActivity {
         }
         Log.d("answer", String.valueOf(answer_int));
 
-        title_one.setText(title_random_list.get(0));
-        title_two.setText(title_random_list.get(1));
-        title_three.setText(title_random_list.get(2));
+//        title_zero.setText("hello");
+
+//        title_one.setText(title_random_list.get(0));
+//        title_two.setText(title_random_list.get(1));
+//        title_three.setText(title_random_list.get(2));
         title_four.setText(title_random_list.get(3));
     }
 

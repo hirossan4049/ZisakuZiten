@@ -99,6 +99,31 @@ public class CreateActivity extends AppCompatActivity {
         }
     }
 
+    public void next(View v){
+        String title   = titleText.getText().toString();
+        String content = contentText.getText().toString();
+
+        if(title.length() <= 1){
+            Context context = getApplicationContext();
+            Toast.makeText(context,"タイトルは２文字以上入力してね",Toast.LENGTH_SHORT).show();
+        }else if(content.length() <= 1){
+            Context context = getApplicationContext();
+            Toast.makeText(context,"コンテンツは2文字以上入力てね",Toast.LENGTH_SHORT).show();
+        }else{
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss",Locale.JAPANESE);
+            String updateTime = sdf.format(date);
+
+            save(title,updateTime,content);
+
+            Context context = getApplicationContext();
+            Toast.makeText(context,"保存成功！",Toast.LENGTH_SHORT).show();
+
+            titleText.getEditableText().clear();
+            contentText.getEditableText().clear();
+        }
+    }
+
 
 
 
