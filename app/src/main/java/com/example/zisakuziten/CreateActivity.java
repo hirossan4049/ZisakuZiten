@@ -43,15 +43,20 @@ public class CreateActivity extends AppCompatActivity {
         realm.close();
     }
 
-    //from add func
+    //from create func
     public void save(final String title,final String updateDate,final String content){
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 Ziten ziten = realm.createObject(Ziten.class);
-                ziten.title      = title;
-                ziten.updateTime = updateDate;
-                ziten.content    = content;
+                ziten.title       = title;
+                ziten.updateTime  = updateDate;
+                ziten.content     = content;
+
+//                ziten.probability = 0;
+//                ziten.all_ans     = 0;
+//                ziten.correct_ans = 0;
+
             }
         });
 
@@ -63,8 +68,6 @@ public class CreateActivity extends AppCompatActivity {
         String title = titleText.getText().toString();
         //contentを取得
         String content = contentText.getText().toString();
-
-
 
 
         //null判定
@@ -83,7 +86,7 @@ public class CreateActivity extends AppCompatActivity {
 
 
 //      check!
-            check(title, updateDate, content);
+//            check(title, updateDate, content);
 
             //save
             save(title, updateDate, content);
@@ -115,7 +118,7 @@ public class CreateActivity extends AppCompatActivity {
 
 
 
-
+    //?
     public void add(View v){
         //title and content を取得
         String title = titleText.getText().toString();

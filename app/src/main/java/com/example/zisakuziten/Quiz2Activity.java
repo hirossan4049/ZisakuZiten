@@ -27,7 +27,7 @@ import java.util.Random;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class QuizActivity extends AppCompatActivity {
+public class Quiz2Activity extends AppCompatActivity {
     Realm realm;
     public List<Ziten> items;
     public int itemsize;
@@ -35,10 +35,10 @@ public class QuizActivity extends AppCompatActivity {
     private BottomNavigationView mBottomNav;
 
     public TextView contentText;
-    public TextView title_one;
-    public TextView title_two;
-    public TextView title_three;
-    public TextView title_four;
+    public TextView titleText_one;
+    public Button titleText_two;
+    public Button titleText_three;
+    public Button titleText_four;
 
     public TextView correct_num;
     public TextView all_num;
@@ -54,14 +54,10 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_main);
         contentText     = (TextView) findViewById(R.id.content_text);
-
-        title_one   = (TextView)findViewById(R.id.title_one);
-        title_two   = (TextView)findViewById(R.id.title_two);
-        title_three = (TextView)findViewById(R.id.title_three);
-        title_four  = (TextView)findViewById(R.id.title_four);
-
-//        title_one.setText("hello world");
-
+        titleText_one   = (TextView) findViewById(R.id.titleText_one);
+        titleText_two   = (Button) findViewById(R.id.titleText_two);
+        titleText_three = (Button) findViewById(R.id.titleText_three);
+        titleText_four  = (Button) findViewById(R.id.titleText_four);
 
         correct_num  = (TextView)findViewById(R.id.correct_num);
         all_num      = (TextView)findViewById(R.id.all_num);
@@ -109,6 +105,7 @@ public class QuizActivity extends AppCompatActivity {
     public void main(){
         Random random = new Random();
         int answer_size = random.nextInt(itemsize);
+        Log.d("ITEMSIZE!",String.valueOf(itemsize));
 
         String content = items.get(answer_size).content;
         String answer  = items.get(answer_size).title;
@@ -137,10 +134,10 @@ public class QuizActivity extends AppCompatActivity {
         }
         Log.d("answer", String.valueOf(answer_int));
 
-        title_one.setText(title_random_list.get(0));
-        title_two.setText(title_random_list.get(1));
-        title_three.setText(title_random_list.get(2));
-        title_four.setText(title_random_list.get(3));
+        titleText_one.setText(title_random_list.get(0));
+        titleText_two.setText(title_random_list.get(1));
+        titleText_three.setText(title_random_list.get(2));
+        titleText_four.setText(title_random_list.get(3));
     }
 
     public void correct(){
