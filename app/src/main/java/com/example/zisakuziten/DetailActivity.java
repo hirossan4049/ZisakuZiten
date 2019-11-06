@@ -67,6 +67,12 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
+    public void next(View v) {
+        Context context = getApplicationContext();
+        Toast.makeText(context,"編集アクティビティでは使用できません。",Toast.LENGTH_SHORT).show();
+    }
+
 
 
 }
+
