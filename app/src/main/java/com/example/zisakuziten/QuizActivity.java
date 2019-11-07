@@ -35,10 +35,10 @@ public class QuizActivity extends AppCompatActivity {
     private BottomNavigationView mBottomNav;
 
     public TextView contentText;
-    public TextView title_one;
-    public TextView title_two;
-    public TextView title_three;
-    public TextView title_four;
+    public TextView titleText_one;
+    public TextView titleText_two;
+    public TextView titleText_three;
+    public TextView titleText_four;
 
     public TextView correct_num;
     public TextView all_num;
@@ -57,10 +57,10 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz_main);
         contentText     = (TextView) findViewById(R.id.content_text);
 
-        title_one   = (TextView)findViewById(R.id.title_one);
-        title_two   = (TextView)findViewById(R.id.title_two);
-        title_three = (TextView)findViewById(R.id.title_three);
-        title_four  = (TextView)findViewById(R.id.title_four);
+        titleText_one   = (TextView)findViewById(R.id.title_one);
+        titleText_two   = (TextView)findViewById(R.id.title_two);
+        titleText_three = (TextView)findViewById(R.id.title_three);
+        titleText_four  = (TextView)findViewById(R.id.title_four);
 
 //        title_zero = (TextView)findViewById(R.id.title_zero);
 
@@ -143,10 +143,10 @@ public class QuizActivity extends AppCompatActivity {
 
 //        title_zero.setText("hello");
 
-//        title_one.setText(title_random_list.get(0));
-//        title_two.setText(title_random_list.get(1));
-//        title_three.setText(title_random_list.get(2));
-        title_four.setText(title_random_list.get(3));
+        titleText_one.setText(title_random_list.get(0));
+        titleText_two.setText(title_random_list.get(1));
+        titleText_three.setText(title_random_list.get(2));
+        titleText_four.setText(title_random_list.get(3));
     }
 
     public void correct(){

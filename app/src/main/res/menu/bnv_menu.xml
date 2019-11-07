@@ -8,7 +8,7 @@
     <item
         android:id="@+id/quiz"
         android:icon="@drawable/ic_quiz"
-        android:title="Quiz" />
+        android:title="Play" />
 
 <!--    <item-->
 <!--        android:id="@+id/label"-->

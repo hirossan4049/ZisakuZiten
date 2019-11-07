@@ -8,12 +8,12 @@
     <item
         android:id="@+id/item2"
         android:icon="@drawable/ic_quiz"
-        android:title="Quiz" />
+        android:title="Play" />
 
     <item
         android:id="@+id/item3"
         android:icon="@drawable/ic_store"
-        android:title="store"/>
+        android:title="設定"/>
 
 
 

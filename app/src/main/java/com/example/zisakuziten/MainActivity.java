@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
 //                startActivity(intent);
                 break;
             case R.id.quiz:
-                Intent quiz_intent = new Intent(this,QuizActivity.class);
+                Intent quiz_intent = new Intent(this,PlayChoiceActivity.class);
                 startActivity(quiz_intent);
                 break;
             case R.id.store:
