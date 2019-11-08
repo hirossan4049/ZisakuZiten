@@ -1,6 +1,7 @@
 package com.example.zisakuziten;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +20,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.w3c.dom.Text;
 
+import java.sql.SQLTransactionRollbackException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -46,6 +49,7 @@ public class Quiz2Activity extends AppCompatActivity {
     public int correct_number;
     public int all_number;
 
+    public List<Ziten> shuffle_items;
     public List<Ziten> trueList;
     public List<Ziten> falseList;
 
@@ -78,13 +82,17 @@ public class Quiz2Activity extends AppCompatActivity {
         all_number     = 0;
 //        parsent_number = 0;
 
-//        trueList  = new ArrayList<>();
-//        falseList = new ArrayList<>();
+        trueList  = new ArrayList<>();
+        falseList = new ArrayList<>();
 
         realm = Realm.getDefaultInstance();
         RealmResults<Ziten> results = realm.where(Ziten.class).findAll();
         items    = realm.copyFromRealm(results);
         itemsize = items.size();
+        if (itemsize < 4){
+            Toast.makeText(this, "4つ以上作成してください！", Toast.LENGTH_LONG).show();
+            finish();
+        }
 
         main();
 
@@ -116,120 +124,99 @@ public class Quiz2Activity extends AppCompatActivity {
         }
 
     }
-
     public void main(){
-        Random random = new Random();
-        int answer_size = random.nextInt(itemsize);
+        all_number ++;
+        if (all_number >= itemsize){
 
-        String content = items.get(answer_size).content;
-        String answer  = items.get(answer_size).title;
+        }else{
+            farst_main();
+        }
 
+    }
 
-        List<Ziten>() list = Collections.shuffle(items);
-
-        Log.d("TESTTT", String.valueOf(items));
-
-
-
-
-
-        int incorrect_one   = random.nextInt(itemsize);
-        int incorrect_two   = random.nextInt(itemsize);
-        int incorrect_three = random.nextInt(itemsize);
-
-        String title_one   = items.get(incorrect_one).title;
-        String title_two   = items.get(incorrect_two).title;
-        String title_three = items.get(incorrect_three).title;
+    public void farst_main(){
+        shuffle_items = items;
+        Collections.shuffle(shuffle_items);
 
 
+        String content     = shuffle_items.get(0).content;
+        String answer      = shuffle_items.get(0).title;
+        String title_one   = shuffle_items.get(1).title;
+        String title_two   = shuffle_items.get(2).title;
+        String title_three = shuffle_items.get(3).title;
+
+        String[] shuffle_settext_str = {answer,title_one,title_two,title_three};
+        List<String> shuffle_setText_list = Arrays.asList(shuffle_settext_str);
+        Collections.shuffle(shuffle_setText_list);
 
         contentText.setText(content);
-        List<String> title_random_list = new ArrayList<String>();
-        title_random_list.add(answer);
-        title_random_list.add(title_one);
-        title_random_list.add(title_two);
-        title_random_list.add(title_three);
-        Collections.shuffle(title_random_list);
 
-        for(int i = 0; i < title_random_list.size(); i++){
-            if (answer == title_random_list.get(i)){
-                answer_int = i;
-            }
-
-        }
-        Log.d("answer", String.valueOf(answer_int));
-
-//        title_zero.setText("hello");
-
-        titleText_one.setText(title_random_list.get(0));
-        titleText_two.setText(title_random_list.get(1));
-        titleText_three.setText(title_random_list.get(2));
-        titleText_four.setText(title_random_list.get(3));
+        titleText_one.setText(shuffle_setText_list.get(0));
+        titleText_two.setText(shuffle_setText_list.get(1));
+        titleText_three.setText(shuffle_setText_list.get(2));
+        titleText_four.setText(shuffle_setText_list.get(3));
     }
 
     public void correct(){
-        all_number     += 1;
-        correct_number += 1;
-        int parsent_number = (int) Math.floor((float) correct_number/all_number * 100);
+        Toast.makeText(this, "正解！", Toast.LENGTH_SHORT).show();
 
+        correct_number += 1;
+        falseList.remove(shuffle_items.get(0));
+        trueList.add(shuffle_items.get(0));
+
+        int parsent_number = (int) Math.floor((float) correct_number/all_number * 100);
         correct_num.setText(String.valueOf(correct_number));
         all_num.setText(String.valueOf(all_number));
         parsent_num.setText(parsent_number+"%");
+        main();
     }
+
     public void incorrect(){
-        all_number += 1;
+        Toast.makeText(this, "不正解...", Toast.LENGTH_SHORT).show();
+
+        trueList.remove(shuffle_items.get(0));
+        falseList.add(shuffle_items.get(0));
+
         int parsent_number = (int) Math.floor((float) correct_number/all_number * 100);
-        Log.d("correct_number",String.valueOf(correct_number));
-        Log.d("all_number",String.valueOf(all_number));
-        Log.d("parsent_number",String.valueOf(parsent_number));
         all_num.setText(String.valueOf(all_number));
         parsent_num.setText(parsent_number+"%");
+        main();
 
+    }
+
+    public void correct_log(){
+        Log.d("correct_number",String.valueOf(correct_number));
+        Log.d("all_number",String.valueOf(all_number));
+        Log.d("TRUELIST", String.valueOf(trueList));
+        Log.d("FALSELIST", String.valueOf(falseList));
     }
 
 
     public void titleText_one(View v){
-        if (answer_int == 0){
-            Toast.makeText(this, "正解！", Toast.LENGTH_SHORT).show();
+        if (titleText_one.getText() == shuffle_items.get(0).title){
             correct();
-            main();
         }else{
-            Toast.makeText(this, "不正解...", Toast.LENGTH_SHORT).show();
             incorrect();
-
         }
     }
     public void titleText_two(View v){
-        if (answer_int == 1){
-            Toast.makeText(this, "正解！", Toast.LENGTH_SHORT).show();
+        if (titleText_two.getText() == shuffle_items.get(0).title){
             correct();
-            main();
         }else{
-            Toast.makeText(this, "不正解...", Toast.LENGTH_SHORT).show();
             incorrect();
-
         }
     }
-
     public void titleText_three(View v){
-        if (answer_int == 2){
-            Toast.makeText(this, "正解！", Toast.LENGTH_SHORT).show();
+        if (titleText_three.getText() == shuffle_items.get(0).title){
             correct();
-            main();
         }else{
-            Toast.makeText(this, "不正解...", Toast.LENGTH_SHORT).show();
             incorrect();
-
         }
     }
-
     public void titleText_four(View v){
-        if (answer_int == 3){
-            Toast.makeText(this, "正解！", Toast.LENGTH_LONG).show();
+        if (titleText_four.getText() == shuffle_items.get(0).title){
             correct();
-            main();
         }else{
-            Toast.makeText(this, "不正解...", Toast.LENGTH_LONG).show();
             incorrect();
         }
     }
