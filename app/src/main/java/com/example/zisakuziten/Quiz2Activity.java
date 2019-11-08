@@ -36,15 +36,21 @@ public class Quiz2Activity extends AppCompatActivity {
 
     public TextView contentText;
     public TextView titleText_one;
-    public Button titleText_two;
-    public Button titleText_three;
-    public Button titleText_four;
+    public TextView titleText_two;
+    public TextView titleText_three;
+    public TextView titleText_four;
 
     public TextView correct_num;
     public TextView all_num;
     public TextView parsent_num;
     public int correct_number;
     public int all_number;
+
+    public List<Ziten> trueList;
+    public List<Ziten> falseList;
+
+
+    public TextView title_zero;
 
 //    public float parsent_number;
 
@@ -54,10 +60,16 @@ public class Quiz2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_main);
         contentText     = (TextView) findViewById(R.id.content_text);
-        titleText_one   = (TextView) findViewById(R.id.titleText_one);
-        titleText_two   = (Button) findViewById(R.id.titleText_two);
-        titleText_three = (Button) findViewById(R.id.titleText_three);
-        titleText_four  = (Button) findViewById(R.id.titleText_four);
+
+        titleText_one   = (TextView)findViewById(R.id.title_one);
+        titleText_two   = (TextView)findViewById(R.id.title_two);
+        titleText_three = (TextView)findViewById(R.id.title_three);
+        titleText_four  = (TextView)findViewById(R.id.title_four);
+
+//        title_zero = (TextView)findViewById(R.id.title_zero);
+
+//        title_one.setText("hello world");
+
 
         correct_num  = (TextView)findViewById(R.id.correct_num);
         all_num      = (TextView)findViewById(R.id.all_num);
@@ -65,6 +77,9 @@ public class Quiz2Activity extends AppCompatActivity {
         correct_number = 0;
         all_number     = 0;
 //        parsent_number = 0;
+
+//        trueList  = new ArrayList<>();
+//        falseList = new ArrayList<>();
 
         realm = Realm.getDefaultInstance();
         RealmResults<Ziten> results = realm.where(Ziten.class).findAll();
@@ -105,10 +120,18 @@ public class Quiz2Activity extends AppCompatActivity {
     public void main(){
         Random random = new Random();
         int answer_size = random.nextInt(itemsize);
-        Log.d("ITEMSIZE!",String.valueOf(itemsize));
 
         String content = items.get(answer_size).content;
         String answer  = items.get(answer_size).title;
+
+
+        List<Ziten>() list = Collections.shuffle(items);
+
+        Log.d("TESTTT", String.valueOf(items));
+
+
+
+
 
         int incorrect_one   = random.nextInt(itemsize);
         int incorrect_two   = random.nextInt(itemsize);
@@ -117,6 +140,8 @@ public class Quiz2Activity extends AppCompatActivity {
         String title_one   = items.get(incorrect_one).title;
         String title_two   = items.get(incorrect_two).title;
         String title_three = items.get(incorrect_three).title;
+
+
 
         contentText.setText(content);
         List<String> title_random_list = new ArrayList<String>();
@@ -133,6 +158,8 @@ public class Quiz2Activity extends AppCompatActivity {
 
         }
         Log.d("answer", String.valueOf(answer_int));
+
+//        title_zero.setText("hello");
 
         titleText_one.setText(title_random_list.get(0));
         titleText_two.setText(title_random_list.get(1));

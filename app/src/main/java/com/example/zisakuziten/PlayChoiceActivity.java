@@ -88,6 +88,8 @@ public class PlayChoiceActivity extends AppCompatActivity {
             startActivity(intent);
 
         }else if(displayChar == 2){
+            Intent intent = new Intent(this,Quiz2Activity.class);
+            startActivity(intent);
 
         }else if(displayChar == 3){
 

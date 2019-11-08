@@ -23,6 +23,7 @@
         <activity android:name=".CreateActivity"/>
         <activity android:name=".DetailActivity"/>
         <activity android:name=".QuizActivity"/>
+        <activity android:name=".Quiz2Activity"/>
         <activity android:name=".StoreActivity"/>
         <activity android:name=".PlayChoiceActivity"/>
 
