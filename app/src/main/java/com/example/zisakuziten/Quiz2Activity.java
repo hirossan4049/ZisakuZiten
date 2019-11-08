@@ -49,9 +49,15 @@ public class Quiz2Activity extends AppCompatActivity {
     public int correct_number;
     public int all_number;
 
+//    public String answer;
+    public Ziten answer_realm;
+
     public List<Ziten> shuffle_items;
     public List<Ziten> trueList;
     public List<Ziten> falseList;
+
+    // true == falseList_main ,false == nomal.
+    public boolean now_quiz_boolean;
 
 
     public TextView title_zero;
@@ -89,10 +95,7 @@ public class Quiz2Activity extends AppCompatActivity {
         RealmResults<Ziten> results = realm.where(Ziten.class).findAll();
         items    = realm.copyFromRealm(results);
         itemsize = items.size();
-        if (itemsize < 4){
-            Toast.makeText(this, "4つ以上作成してください！", Toast.LENGTH_LONG).show();
-            finish();
-        }
+
 
         main();
 
@@ -125,20 +128,45 @@ public class Quiz2Activity extends AppCompatActivity {
 
     }
     public void main(){
-        all_number ++;
-        if (all_number >= itemsize){
+        Log.d("ITEMSIZE", String.valueOf(itemsize));
+        if (itemsize <= 3){
+            Log.d("NOT ITEM","OH>< ITEM NOT FOUND.");
+            Toast.makeText(this, "4つ以上作成してください！", Toast.LENGTH_LONG).show();
+            finish();
+        }else {
 
-        }else{
-            farst_main();
+            all_number++;
+            //print Log.
+            correct_log();
+            if (all_number >= itemsize) {
+                if (all_number % 3 == 0) {
+                    farst_main();
+                } else {
+                    if (falseList.size() == 0) {
+                        farst_main();
+                        if (falseList.size() == 0) {
+                            Log.d("parfect.","parfect dattakara finished");
+                            Toast.makeText(this, "parfect!", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    } else {
+                        falseList_main();
+                    }
+                }
+            } else {
+                farst_main();
+            }
         }
 
     }
 
     public void farst_main(){
+        now_quiz_boolean = false;
         shuffle_items = items;
+
         Collections.shuffle(shuffle_items);
 
-
+        answer_realm       = shuffle_items.get(0);
         String content     = shuffle_items.get(0).content;
         String answer      = shuffle_items.get(0).title;
         String title_one   = shuffle_items.get(1).title;
@@ -151,18 +179,46 @@ public class Quiz2Activity extends AppCompatActivity {
 
         contentText.setText(content);
 
-        titleText_one.setText(shuffle_setText_list.get(0));
+        titleText_one.setText(String.valueOf("1."+ shuffle_setText_list.get(0)));
         titleText_two.setText(shuffle_setText_list.get(1));
         titleText_three.setText(shuffle_setText_list.get(2));
         titleText_four.setText(shuffle_setText_list.get(3));
     }
 
+    public void falseList_main(){
+        now_quiz_boolean = true;
+        shuffle_items = items;
+
+        Collections.shuffle(shuffle_items);
+        Collections.shuffle(falseList);
+
+        answer_realm       = falseList.get(0);
+        String content     = falseList.get(0).content;
+        String answer      = falseList.get(0).title;
+        String title_one   = shuffle_items.get(1).title;
+        String title_two   = shuffle_items.get(2).title;
+        String title_three = shuffle_items.get(3).title;
+
+        String[] shuffle_settext_str = {answer,title_one,title_two,title_three};
+        List<String> shuffle_setText_list = Arrays.asList(shuffle_settext_str);
+        Collections.shuffle(shuffle_setText_list);
+
+        contentText.setText(content);
+
+        titleText_one.setText(String.valueOf("1."+ shuffle_setText_list.get(0)));
+        titleText_two.setText(String.valueOf("2."+ shuffle_setText_list.get(1)));
+        titleText_three.setText(String.valueOf("3."+ shuffle_setText_list.get(2)));
+        titleText_four.setText(String.valueOf("4."+ shuffle_setText_list.get(3)));
+
+    }
+
+
     public void correct(){
         Toast.makeText(this, "正解！", Toast.LENGTH_SHORT).show();
 
         correct_number += 1;
-        falseList.remove(shuffle_items.get(0));
-        trueList.add(shuffle_items.get(0));
+        falseList.remove(answer_realm);
+        trueList.add(answer_realm);
 
         int parsent_number = (int) Math.floor((float) correct_number/all_number * 100);
         correct_num.setText(String.valueOf(correct_number));
@@ -174,8 +230,8 @@ public class Quiz2Activity extends AppCompatActivity {
     public void incorrect(){
         Toast.makeText(this, "不正解...", Toast.LENGTH_SHORT).show();
 
-        trueList.remove(shuffle_items.get(0));
-        falseList.add(shuffle_items.get(0));
+        trueList.remove(answer_realm);
+        falseList.add(answer_realm);
 
         int parsent_number = (int) Math.floor((float) correct_number/all_number * 100);
         all_num.setText(String.valueOf(all_number));
@@ -193,28 +249,28 @@ public class Quiz2Activity extends AppCompatActivity {
 
 
     public void titleText_one(View v){
-        if (titleText_one.getText() == shuffle_items.get(0).title){
+        if (titleText_one.getText() == answer_realm.title){
             correct();
         }else{
             incorrect();
         }
     }
     public void titleText_two(View v){
-        if (titleText_two.getText() == shuffle_items.get(0).title){
+        if (titleText_two.getText() == answer_realm.title){
             correct();
         }else{
             incorrect();
         }
     }
     public void titleText_three(View v){
-        if (titleText_three.getText() == shuffle_items.get(0).title){
+        if (titleText_three.getText() == answer_realm.title){
             correct();
         }else{
             incorrect();
         }
     }
     public void titleText_four(View v){
-        if (titleText_four.getText() == shuffle_items.get(0).title){
+        if (titleText_four.getText() == answer_realm.title){
             correct();
         }else{
             incorrect();
@@ -230,6 +286,5 @@ public class Quiz2Activity extends AppCompatActivity {
         finish();
     }
 
-//a
 
 }
