@@ -179,7 +179,7 @@ public class Quiz2Activity extends AppCompatActivity {
 
         contentText.setText(content);
 
-        titleText_one.setText(String.valueOf("1."+ shuffle_setText_list.get(0)));
+        titleText_one.setText(shuffle_setText_list.get(0));
         titleText_two.setText(shuffle_setText_list.get(1));
         titleText_three.setText(shuffle_setText_list.get(2));
         titleText_four.setText(shuffle_setText_list.get(3));
@@ -191,13 +191,38 @@ public class Quiz2Activity extends AppCompatActivity {
 
         Collections.shuffle(shuffle_items);
         Collections.shuffle(falseList);
+        Integer overlapInt = shuffle_items.indexOf(falseList.get(0));
 
         answer_realm       = falseList.get(0);
         String content     = falseList.get(0).content;
         String answer      = falseList.get(0).title;
-        String title_one   = shuffle_items.get(1).title;
-        String title_two   = shuffle_items.get(2).title;
-        String title_three = shuffle_items.get(3).title;
+
+        //falseList(1)と重ならないように。
+        Integer getItem_one;
+        Integer getItem_two;
+        Integer getItem_three;
+        if(overlapInt == 0){
+            getItem_one   = 1;
+            getItem_two   = 2;
+            getItem_three = 3;
+        }else if(overlapInt == 1){
+            getItem_one   = 0;
+            getItem_two   = 2;
+            getItem_three = 3;
+        }else if(overlapInt == 2){
+            getItem_one   = 0;
+            getItem_two   = 1;
+            getItem_three = 3;
+        }else {
+            getItem_one   = 0;
+            getItem_two   = 1;
+            getItem_three = 2;
+        }
+
+        String title_one = shuffle_items.get(getItem_one).title;
+        String title_two = shuffle_items.get(getItem_two).title;
+        String title_three = shuffle_items.get(getItem_three).title;
+
 
         String[] shuffle_settext_str = {answer,title_one,title_two,title_three};
         List<String> shuffle_setText_list = Arrays.asList(shuffle_settext_str);
@@ -205,10 +230,10 @@ public class Quiz2Activity extends AppCompatActivity {
 
         contentText.setText(content);
 
-        titleText_one.setText(String.valueOf("1."+ shuffle_setText_list.get(0)));
-        titleText_two.setText(String.valueOf("2."+ shuffle_setText_list.get(1)));
-        titleText_three.setText(String.valueOf("3."+ shuffle_setText_list.get(2)));
-        titleText_four.setText(String.valueOf("4."+ shuffle_setText_list.get(3)));
+        titleText_one.setText(shuffle_setText_list.get(0));
+        titleText_two.setText(shuffle_setText_list.get(1));
+        titleText_three.setText(shuffle_setText_list.get(2));
+        titleText_four.setText(shuffle_setText_list.get(3));
 
     }
 
