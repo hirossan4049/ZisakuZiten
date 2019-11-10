@@ -48,6 +48,7 @@ public class Quiz2Activity extends AppCompatActivity {
     public TextView parsent_num;
     public int correct_number;
     public int all_number;
+    public int sizeZero;
 
 //    public String answer;
     public Ziten answer_realm;
@@ -95,6 +96,7 @@ public class Quiz2Activity extends AppCompatActivity {
         RealmResults<Ziten> results = realm.where(Ziten.class).findAll();
         items    = realm.copyFromRealm(results);
         itemsize = items.size();
+        sizeZero = 0;
 
 
         main();
@@ -143,8 +145,9 @@ public class Quiz2Activity extends AppCompatActivity {
                     farst_main();
                 } else {
                     if (falseList.size() == 0) {
+                        sizeZero ++;
                         farst_main();
-                        if (falseList.size() == 0) {
+                        if (sizeZero >= itemsize) {
                             Log.d("parfect.","parfect dattakara finished");
                             Toast.makeText(this, "parfect!", Toast.LENGTH_SHORT).show();
                             finish();
