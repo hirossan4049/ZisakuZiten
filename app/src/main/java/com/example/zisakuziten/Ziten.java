@@ -14,6 +14,9 @@ public class Ziten extends RealmObject {
 //
 //    public Integer correct_ans;
 
+    public Integer groupId;
+    public String groupName;
+
     public String updateTime;
 
 }

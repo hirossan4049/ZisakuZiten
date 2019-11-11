@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
+    android:windowSoftInputMode="stateAlwaysHidden"
     tools:context=".MainActivity">
 
     <!--toolbar-->
@@ -17,7 +18,7 @@
 
 
     <FrameLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_app_bar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,17 +52,14 @@
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:layout_margin="16dp"
             android:onClick="create"
-            android:id="@+id/action_button"
-            app:fabSize="normal"
-            />
-<!--            android:src="@drawable/ic_edit"-->
-
-
+            app:fabSize="normal" />
+        <!--            android:src="@drawable/ic_edit"-->
 
 
         <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
