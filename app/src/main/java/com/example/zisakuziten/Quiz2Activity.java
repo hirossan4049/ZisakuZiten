@@ -147,10 +147,9 @@ public class Quiz2Activity extends AppCompatActivity {
                     if (falseList.size() == 0) {
                         sizeZero ++;
                         farst_main();
-                        if (sizeZero >= itemsize) {
-                            Log.d("parfect.","parfect dattakara finished");
-                            Toast.makeText(this, "parfect!", Toast.LENGTH_SHORT).show();
-                            finish();
+                        if(sizeZero >= itemsize){
+                            Toast.makeText(this,"完璧です！！(この先はランダムに出題します。）",Toast.LENGTH_LONG).show();
+                            farst_main();
                         }
                     } else {
                         falseList_main();
