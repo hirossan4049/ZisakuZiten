@@ -27,7 +27,7 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class GroupActivity extends AppCompatActivity {
+public class GroupPiceActivity extends AppCompatActivity {
 
     public Realm realm;
     public ListView listView;
@@ -216,6 +216,10 @@ public class GroupActivity extends AppCompatActivity {
         setMemoList();
 
 
+    }
+
+    public void back(View v){
+        finish();
     }
 
 

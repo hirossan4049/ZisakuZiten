@@ -3,13 +3,11 @@ package com.example.zisakuziten;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 
@@ -20,7 +18,6 @@ import androidx.core.content.res.ResourcesCompat;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_group);
 
         //openRealm
         realm    = Realm.getDefaultInstance();
@@ -102,33 +99,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // メニューを作成する
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.home_menu, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.home_menu, menu);
+//        return true;
+//    }
 
     // メニューアイテム選択イベント（メニューが選択された時に呼ばれる）
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.item1:
-//                checkBox.setVisibility(View.VISIBLE);
-                checkbox_status = 1;
-                setMemoList();
-                // ここに設定タンがタップされた時に実行する処理を追加する
-                break;
-            case R.id.item2:
-                break;
-            case R.id.item3:
-                // 終了ボタンがタップされた時の処理
-                finish();
-                break;
-        }
-
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.item1:
+////                checkBox.setVisibility(View.VISIBLE);
+//                checkbox_status = 1;
+//                setMemoList();
+//                // ここに設定タンがタップされた時に実行する処理を追加する
+//                break;
+//            case R.id.item2:
+//                break;
+//            case R.id.item3:
+//                // 終了ボタンがタップされた時の処理
+//                finish();
+//                break;
+//        }
+//
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     // navigation view selected
     private void selectNavigation(MenuItem item) {
@@ -157,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setMemoList(){
         //Read Realm
-        RealmResults<Ziten> results = realm.where(Ziten.class).findAll();
+        RealmResults<Ziten> results = realm.where(Ziten.class).equalTo("groupId",1).findAll();
         List<Ziten> items = realm.copyFromRealm(results);
 
         if (checkbox_status == 0){
@@ -217,6 +214,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
 
 
 }
