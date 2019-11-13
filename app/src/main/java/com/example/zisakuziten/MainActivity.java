@@ -151,10 +151,25 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
     public void setMemoList(){
         //Read Realm
-        RealmResults<Ziten> results = realm.where(Ziten.class).equalTo("groupId",1).findAll();
+//        List<Ziten> results = null;
+        List<Ziten> results = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            Log.d("GroupID",i+"");
+            Ziten test = realm.where(Ziten.class).equalTo("groupId", i).findFirst();
+//            results.add(test);
+            if (test == null){
+                Log.d("GroupID breaked!",""+i);
+                break;
+            }else{
+                results.add(test);
+            }
+
+        }
+
+
+//        RealmResults<Ziten> results = realm.where(Ziten.class).equalTo("groupId",1).findAll();
         List<Ziten> items = realm.copyFromRealm(results);
 
         if (checkbox_status == 0){
@@ -166,7 +181,8 @@ public class MainActivity extends AppCompatActivity {
             action_button.setImageDrawable(drawable);
         }
 
-        ZitenAdapter adapter = new ZitenAdapter(this, R.layout.home_item, items,checkbox_status);
+//        ZitenAdapter adapter = new ZitenAdapter(this, R.layout.home_item, items,checkbox_status);
+        ZitenGroupAdapter adapter = new ZitenGroupAdapter(this, R.layout.group_item, items,checkbox_status);
         listView.setAdapter(adapter);
     }
 

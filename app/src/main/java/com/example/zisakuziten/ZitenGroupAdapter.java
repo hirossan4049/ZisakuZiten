@@ -14,14 +14,14 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class ZitenAdapter extends ArrayAdapter<Ziten> {
+public class ZitenGroupAdapter extends ArrayAdapter<Ziten> {
 
     private LayoutInflater layoutinflater;
-//    public CheckBox checkBox;
+    //    public CheckBox checkBox;
     public int checkbox;
 
 
-    ZitenAdapter(Context context, int textViewResourceId, List<Ziten> objects,int checkbox_status) {
+    ZitenGroupAdapter(Context context, int textViewResourceId, List<Ziten> objects,int checkbox_status) {
         super(context, textViewResourceId, objects);
         layoutinflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         checkbox       = checkbox_status;
@@ -33,11 +33,11 @@ public class ZitenAdapter extends ArrayAdapter<Ziten> {
         Ziten ziten = getItem(position);
 
         if (convertView == null) {
-            convertView = layoutinflater.inflate(R.layout.home_item, null);
+            convertView = layoutinflater.inflate(R.layout.group_item, null);
         }
 
         TextView titleText   = (TextView) convertView.findViewById(R.id.titleText);
-        TextView contentText = (TextView) convertView.findViewById(R.id.contentText);
+//        TextView contentText = (TextView) convertView.findViewById(R.id.contentText);
         CheckBox checkBox    = (CheckBox) convertView.findViewById(R.id.checkBox);
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -59,8 +59,8 @@ public class ZitenAdapter extends ArrayAdapter<Ziten> {
 //        }
 
 //        titleText.setText(ziten.title);
-        titleText.setText(String.valueOf(ziten.groupId));
-        contentText.setText(ziten.content);
+        titleText.setText(String.valueOf(ziten.groupName));
+//        contentText.setText(String.valueOf(ziten.groupId));
 
         return convertView;
     }
