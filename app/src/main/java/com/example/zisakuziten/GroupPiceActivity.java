@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.ZoomControls;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class GroupPiceActivity extends AppCompatActivity {
@@ -157,8 +159,8 @@ public class GroupPiceActivity extends AppCompatActivity {
 
     public void setMemoList(){
         //Read Realm
-        RealmResults<Ziten> results = realm.where(Ziten.class).findAll();
-        List<Ziten> items = realm.copyFromRealm(results);
+        RealmList<Ziten> gpList = realm.where(Group.class).equalTo("updateTime",getIntent().getStringExtra("updateTime")).findFirst().ziten_updT_List;
+        List<Ziten> items = realm.copyFromRealm(gpList);
 
         if (checkbox_status == 0){
             Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_edit, null);

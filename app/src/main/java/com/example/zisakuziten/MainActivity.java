@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
 
+
         //openRealm
         realm    = Realm.getDefaultInstance();
         listView = (ListView)findViewById(R.id.listView);
@@ -53,36 +54,14 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        //clickで編集
+        //clickでpiceに移動！
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (checkbox_status == 0) {
-                    Ziten ziten = (Ziten) parent.getItemAtPosition(position);
-                    Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-                    intent.putExtra("updateTime", ziten.updateTime);
-
+                    Group group = (Group) parent.getItemAtPosition(position);
+                    Intent intent = new Intent(getApplicationContext(), GroupPiceActivity.class);
+                    intent.putExtra("updateTime", group.updateTime);
                     startActivity(intent);
-
-                }else if(checkbox_status == 1){
-                    CheckBox checkview = view.findViewById(R.id.checkBox);
-
-                    Ziten ziten = (Ziten)parent.getItemAtPosition(position);
-
-                    if (checkview.isChecked() == true){
-                        checkview.setChecked(false);
-                        checked_list.remove(checked_list.indexOf(ziten));
-                        Log.d(String.valueOf(checked_list),"checkbox false");
-
-                    }else if(checkview.isChecked() == false) {
-                        checkview.setChecked(true);
-                        checked_list.add(ziten);
-                        Log.d(String.valueOf(checked_list),"checkbox true");
-
-                    }
-                }
-
-
             }
 
         });
@@ -98,41 +77,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // メニューを作成する
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.home_menu, menu);
-//        return true;
-//    }
-
-    // メニューアイテム選択イベント（メニューが選択された時に呼ばれる）
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.item1:
-////                checkBox.setVisibility(View.VISIBLE);
-//                checkbox_status = 1;
-//                setMemoList();
-//                // ここに設定タンがタップされた時に実行する処理を追加する
-//                break;
-//            case R.id.item2:
-//                break;
-//            case R.id.item3:
-//                // 終了ボタンがタップされた時の処理
-//                finish();
-//                break;
-//        }
-//
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 
     // navigation view selected
     private void selectNavigation(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.home:
                 checkbox_status = 0;
-                setMemoList();
+                setGroupList();
 //                Intent intent = new Intent(this,MainActivity.class);
 //                startActivity(intent);
                 break;
@@ -151,26 +102,10 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public void setMemoList(){
+    public void setGroupList(){
         //Read Realm
-//        List<Ziten> results = null;
-        List<Ziten> results = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
-            Log.d("GroupID",i+"");
-            Ziten test = realm.where(Ziten.class).equalTo("groupId", i).findFirst();
-//            results.add(test);
-            if (test == null){
-                Log.d("GroupID breaked!",""+i);
-                break;
-            }else{
-                results.add(test);
-            }
-
-        }
-
-
-//        RealmResults<Ziten> results = realm.where(Ziten.class).equalTo("groupId",1).findAll();
-        List<Ziten> items = realm.copyFromRealm(results);
+        RealmResults<Group> results = realm.where(Group.class).findAll();
+        List<Group> items = realm.copyFromRealm(results);
 
         if (checkbox_status == 0){
             Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_edit, null);
@@ -191,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         checkbox_status = 0;
-        setMemoList();
+        setGroupList();
     }
 
     @Override
@@ -203,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void create(View view){
         if (checkbox_status == 0) {
-            Intent intent = new Intent(this, CreateActivity.class);
+            Intent intent = new Intent(this, GroupCreateActivity.class);
             startActivity(intent);
         }else if(checkbox_status == 1){
             delete();
@@ -211,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void delete(){
-//        setMemoList();
+//        setGroupList();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -226,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        setMemoList();
+        setGroupList();
 
 
     }

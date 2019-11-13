@@ -59,7 +59,8 @@ public class ZitenAdapter extends ArrayAdapter<Ziten> {
 //        }
 
 //        titleText.setText(ziten.title);
-        titleText.setText(String.valueOf(ziten.groupId));
+        //注意
+//        titleText.setText(String.valueOf(ziten.groupId));
         contentText.setText(ziten.content);
 
         return convertView;

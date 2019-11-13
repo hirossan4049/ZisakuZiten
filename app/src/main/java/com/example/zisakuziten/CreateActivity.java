@@ -53,8 +53,9 @@ public class CreateActivity extends AppCompatActivity {
                 ziten.updateTime  = updateDate;
                 ziten.content     = content;
 
-                ziten.groupId   = 0;
-                ziten.groupName = null;
+                //注意
+//                ziten.groupId   = 0;
+//                ziten.groupName = null;
 
 //                ziten.probability = 0;
 //                ziten.all_ans     = 0;

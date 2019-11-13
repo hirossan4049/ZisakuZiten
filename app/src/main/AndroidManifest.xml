@@ -21,6 +21,7 @@
         </activity>
 
         <activity android:name=".CreateActivity"/>
+        <activity android:name=".GroupCreateActivity"/>
         <activity android:name=".DetailActivity"/>
         <activity android:name=".GroupPiceActivity"/>
         <activity android:name=".QuizActivity"/>

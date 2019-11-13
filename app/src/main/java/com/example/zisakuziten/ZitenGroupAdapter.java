@@ -14,14 +14,14 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class ZitenGroupAdapter extends ArrayAdapter<Ziten> {
+public class ZitenGroupAdapter extends ArrayAdapter<Group> {
 
     private LayoutInflater layoutinflater;
     //    public CheckBox checkBox;
     public int checkbox;
 
 
-    ZitenGroupAdapter(Context context, int textViewResourceId, List<Ziten> objects,int checkbox_status) {
+    ZitenGroupAdapter(Context context, int textViewResourceId, List<Group> objects,int checkbox_status) {
         super(context, textViewResourceId, objects);
         layoutinflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         checkbox       = checkbox_status;
@@ -30,7 +30,7 @@ public class ZitenGroupAdapter extends ArrayAdapter<Ziten> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Ziten ziten = getItem(position);
+        Group group = getItem(position);
 
         if (convertView == null) {
             convertView = layoutinflater.inflate(R.layout.group_item, null);
@@ -58,9 +58,9 @@ public class ZitenGroupAdapter extends ArrayAdapter<Ziten> {
 //            checkBox.setVisibility(View.VISIBLE);
 //        }
 
-//        titleText.setText(ziten.title);
-        titleText.setText(String.valueOf(ziten.groupName));
-//        contentText.setText(String.valueOf(ziten.groupId));
+//        titleText.setText(group.title);
+        titleText.setText(String.valueOf(group.groupName));
+//        contentText.setText(String.valueOf(group.groupId));
 
         return convertView;
     }
