@@ -49,9 +49,14 @@ public class CreateActivity extends AppCompatActivity {
             @Override
             public void execute(Realm realm) {
                 Ziten ziten = realm.createObject(Ziten.class);
-                ziten.title       = title;
-                ziten.updateTime  = updateDate;
-                ziten.content     = content;
+                ziten.title = title;
+                ziten.updateTime = updateDate;
+                ziten.content = content;
+
+                final Group group = realm.where(Group.class).equalTo("updateTime", getIntent().getStringExtra("gpupdateTime")).findFirst();
+                //realm update
+                group.ziten_updT_List.add(realm.where(Ziten.class).equalTo("updateTime",updateDate).findFirst());
+            }
 
                 //注意
 //                ziten.groupId   = 0;
@@ -61,7 +66,7 @@ public class CreateActivity extends AppCompatActivity {
 //                ziten.all_ans     = 0;
 //                ziten.correct_ans = 0;
 
-            }
+
         });
 
     }

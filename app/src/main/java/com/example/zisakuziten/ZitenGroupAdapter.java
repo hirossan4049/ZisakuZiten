@@ -46,20 +46,16 @@ public class ZitenGroupAdapter extends ArrayAdapter<Group> {
             }
         });
 
+        //atode boolean ni
         if (checkbox == 0) {
             checkBox.setVisibility(View.INVISIBLE);
         }
         else if(checkbox == 1){
             checkBox.setVisibility(View.VISIBLE);
         }
-//        if(position % 2 == 0) {
-//            checkBox.setVisibility(View.GONE);
-//        }else{
-//            checkBox.setVisibility(View.VISIBLE);
-//        }
 
-//        titleText.setText(group.title);
         titleText.setText(String.valueOf(group.groupName));
+
 //        contentText.setText(String.valueOf(group.groupId));
 
         return convertView;

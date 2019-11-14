@@ -193,6 +193,7 @@ public class GroupPiceActivity extends AppCompatActivity {
     public void create(View view){
         if (checkbox_status == 0) {
             Intent intent = new Intent(this, CreateActivity.class);
+            intent.putExtra("gpupdateTime",getIntent().getStringExtra("updateTime"));
             startActivity(intent);
         }else if(checkbox_status == 1){
             delete();

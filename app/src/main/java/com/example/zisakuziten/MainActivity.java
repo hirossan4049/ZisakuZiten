@@ -166,6 +166,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void all(View v){
+        Log.d("cliked!","all!");
+    }
+
 
 
 
