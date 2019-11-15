@@ -18,10 +18,10 @@ public class ZitenAdapter extends ArrayAdapter<Ziten> {
 
     private LayoutInflater layoutinflater;
 //    public CheckBox checkBox;
-    public int checkbox;
+    public boolean checkbox;
 
 
-    ZitenAdapter(Context context, int textViewResourceId, List<Ziten> objects,int checkbox_status) {
+    ZitenAdapter(Context context, int textViewResourceId, List<Ziten> objects,boolean checkbox_status) {
         super(context, textViewResourceId, objects);
         layoutinflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         checkbox       = checkbox_status;
@@ -46,10 +46,10 @@ public class ZitenAdapter extends ArrayAdapter<Ziten> {
             }
         });
 
-        if (checkbox == 0) {
+        if (checkbox == false) {
             checkBox.setVisibility(View.INVISIBLE);
         }
-        else if(checkbox == 1){
+        else if(checkbox == true){
             checkBox.setVisibility(View.VISIBLE);
         }
 

@@ -36,7 +36,7 @@ public class GroupPiceActivity extends AppCompatActivity {
     public CheckBox checkBox;
     private BottomNavigationView mBottomNav;
     public FloatingActionButton action_button;
-    public int checkbox_status;
+    public boolean checkbox_status;
     public List<List> checked_list_data;
     public List<Ziten> checked_list;
 
@@ -52,7 +52,7 @@ public class GroupPiceActivity extends AppCompatActivity {
         checkBox = (CheckBox) findViewById(R.id.checkBox);
         action_button = (FloatingActionButton)findViewById(R.id.action_button);
         //0 == GONE ,1 == VISIBLE
-        checkbox_status = 0;
+        checkbox_status = false;
         checked_list = new ArrayList<>();
 
 
@@ -62,14 +62,14 @@ public class GroupPiceActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (checkbox_status == 0) {
+                if (checkbox_status == false) {
                     Ziten ziten = (Ziten) parent.getItemAtPosition(position);
                     Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
                     intent.putExtra("updateTime", ziten.updateTime);
 
                     startActivity(intent);
 
-                }else if(checkbox_status == 1){
+                }else if(checkbox_status == true){
                     CheckBox checkview = view.findViewById(R.id.checkBox);
 
                     Ziten ziten = (Ziten)parent.getItemAtPosition(position);
@@ -78,6 +78,10 @@ public class GroupPiceActivity extends AppCompatActivity {
                         checkview.setChecked(false);
                         checked_list.remove(checked_list.indexOf(ziten));
                         Log.d(String.valueOf(checked_list),"checkbox false");
+                        if(checked_list.size() == 0){
+                            checkbox_status = false;
+                            setMemoList();
+                        }
 
                     }else if(checkview.isChecked() == false) {
                         checkview.setChecked(true);
@@ -91,7 +95,7 @@ public class GroupPiceActivity extends AppCompatActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                checkbox_status = 1;
+                checkbox_status = true;
                 setMemoList();
                 return false;
             }
@@ -121,7 +125,7 @@ public class GroupPiceActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.item1:
 //                checkBox.setVisibility(View.VISIBLE);
-                checkbox_status = 1;
+                checkbox_status = true;
                 setMemoList();
                 // ここに設定タンがタップされた時に実行する処理を追加する
                 break;
@@ -141,7 +145,7 @@ public class GroupPiceActivity extends AppCompatActivity {
     private void selectNavigation(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.home:
-                checkbox_status = 0;
+                checkbox_status = false;
                 setMemoList();
 //                Intent intent = new Intent(this,MainActivity.class);
 //                startActivity(intent);
@@ -173,16 +177,15 @@ public class GroupPiceActivity extends AppCompatActivity {
 //            Log.d("EEEEEE","!!!!!!!!!!!!!!!!!!!!!!!");
 
 //        }else {
-        Log.d("ERROR!","ERROR! ITEM");
         RealmList<Ziten> gpList = realm.where(Group.class).equalTo("updateTime", getIntent().getStringExtra("updateTime")).findFirst().ziten_updT_List;
         List<Ziten> items = realm.copyFromRealm(gpList);
 //        }
 
-        if (checkbox_status == 0){
+        if (checkbox_status == false){
             Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_edit, null);
             action_button.setImageDrawable(drawable);
         }
-        else if (checkbox_status == 1){
+        else if (checkbox_status == true){
             Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_delete, null);
             action_button.setImageDrawable(drawable);
         }
@@ -195,7 +198,7 @@ public class GroupPiceActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        checkbox_status = 0;
+        checkbox_status = false;
         setMemoList();
     }
 
@@ -207,11 +210,11 @@ public class GroupPiceActivity extends AppCompatActivity {
 
 
     public void create(View view){
-        if (checkbox_status == 0) {
+        if (checkbox_status == false) {
             Intent intent = new Intent(this, CreateActivity.class);
             intent.putExtra("gpupdateTime",getIntent().getStringExtra("updateTime"));
             startActivity(intent);
-        }else if(checkbox_status == 1){
+        }else if(checkbox_status == true){
             delete();
         }
     }
