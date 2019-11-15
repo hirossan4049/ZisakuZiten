@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
 
-
         //openRealm
         realm    = Realm.getDefaultInstance();
         listView = (ListView)findViewById(R.id.listView);
@@ -168,6 +167,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void all(View v){
         Log.d("cliked!","all!");
+//        Intent intent = new Intent(getApplicationContext(), GroupPiceActivity.class);
+//        //booleannnnnn
+//        intent.putExtra("all_boolean",true);
+//        startActivity(intent);
     }
 
 

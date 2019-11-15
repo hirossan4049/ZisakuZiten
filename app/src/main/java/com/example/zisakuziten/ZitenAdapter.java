@@ -52,33 +52,13 @@ public class ZitenAdapter extends ArrayAdapter<Ziten> {
         else if(checkbox == 1){
             checkBox.setVisibility(View.VISIBLE);
         }
-//        if(position % 2 == 0) {
-//            checkBox.setVisibility(View.GONE);
-//        }else{
-//            checkBox.setVisibility(View.VISIBLE);
-//        }
 
-//        titleText.setText(ziten.title);
         titleText.setText(ziten.title);
         contentText.setText(ziten.content);
 
         return convertView;
     }
 
-//    public void checkbox_visible(){
-//        checkBox.setVisibility(View.VISIBLE);
-//    }
-
-//    public class checkbox_chenge{
-//        public CheckBox checkBox;
-//
-//        public void setGone(){
-//            checkBox.setVisibility(View.GONE);
-//        }
-//        public void setVISIBLE(){
-//            checkBox.setVisibility(View.VISIBLE);
-//        }
-//    }
 
 
 

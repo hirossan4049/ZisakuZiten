@@ -83,13 +83,18 @@ public class GroupPiceActivity extends AppCompatActivity {
                         checkview.setChecked(true);
                         checked_list.add(ziten);
                         Log.d(String.valueOf(checked_list),"checkbox true");
-
                     }
                 }
-
-
             }
-
+        });
+        //Long click
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                checkbox_status = 1;
+                setMemoList();
+                return false;
+            }
         });
 
         // navigation selected, selected switch BUN is selectNavigation function
@@ -159,8 +164,19 @@ public class GroupPiceActivity extends AppCompatActivity {
 
     public void setMemoList(){
         //Read Realm
-        RealmList<Ziten> gpList = realm.where(Group.class).equalTo("updateTime",getIntent().getStringExtra("updateTime")).findFirst().ziten_updT_List;
+//        List<Ziten> items = new ArrayList<>();
+//        Log.d("GETSTRINGEXTRA",getIntent().getStringExtra("all"));
+
+//        if(getIntent().getStringExtra("all_boolean") == "true"){
+//            RealmResults<Ziten> gpList = realm.where(Ziten.class).findAll();
+//            items = realm.copyFromRealm(gpList);
+//            Log.d("EEEEEE","!!!!!!!!!!!!!!!!!!!!!!!");
+
+//        }else {
+        Log.d("ERROR!","ERROR! ITEM");
+        RealmList<Ziten> gpList = realm.where(Group.class).equalTo("updateTime", getIntent().getStringExtra("updateTime")).findFirst().ziten_updT_List;
         List<Ziten> items = realm.copyFromRealm(gpList);
+//        }
 
         if (checkbox_status == 0){
             Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_edit, null);
