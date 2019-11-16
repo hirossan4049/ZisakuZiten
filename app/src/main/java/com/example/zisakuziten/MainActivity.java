@@ -1,8 +1,10 @@
 package com.example.zisakuziten;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -62,7 +65,34 @@ public class MainActivity extends AppCompatActivity {
                     intent.putExtra("updateTime", group.updateTime);
                     startActivity(intent);
             }
+        });
+        //Group sakuzyo or hensyu
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final Group group = (Group)parent.getItemAtPosition(position);
+                final String[] items = {"名前変えたい！", "抹殺するんだ!", "なかったことにする"};
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle(group.groupName + "をどうするんや？")
+                        .setItems(items, new DialogInterface.OnClickListener() {
 
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (which == 0){
+                                    Log.d("AlertDialog","item1,hensyuu");
+                                    Intent intent = new Intent(getApplicationContext(),GroupDetailActivity.class);
+                                    intent.putExtra("updateTime",group.updateTime);
+                                    startActivity(intent);
+
+                                }else if(which == 1){
+                                    Log.d("AlertDialog","item2,syoukyo(delete");
+                                    delete(group);
+                                }else {
+                                }
+                            }
+                        }).show();
+                return false;
+            }
         });
 
         // navigation selected, selected switch BUN is selectNavigation function
@@ -95,8 +125,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(store_intent);
                 break;
         }
-
     }
+
 
 
 
@@ -136,26 +166,24 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void create(View view){
-        if (checkbox_status == 0) {
-            Intent intent = new Intent(this, GroupCreateActivity.class);
-            startActivity(intent);
-        }else if(checkbox_status == 1){
-            delete();
-        }
+        Intent intent = new Intent(this, GroupCreateActivity.class);
+        startActivity(intent);
     }
 
-    public void delete(){
+
+    public void delete(final Group delete_item){
 //        setGroupList();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
 
-                for(int i = 0; i < checked_list.size(); ++i) {
-                     Ziten checked_pice = checked_list.get(i);
+                for(int i = 0; i < delete_item.ziten_updT_List.size(); ++i) {
+                     Ziten checked_pice = delete_item.ziten_updT_List.get(i);
                     Ziten realmZiten = realm.where(Ziten.class).equalTo("updateTime", checked_pice.updateTime).findFirst();
-//                    checked_pice.deleteFromRealm();
                     realmZiten.deleteFromRealm();
                 }
+                Group delete_group = realm.where(Group.class).equalTo("updateTime",delete_item.updateTime).findFirst();
+                delete_group.deleteFromRealm();
             }
         });
 

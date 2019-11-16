@@ -230,6 +230,7 @@ public class GroupPiceActivity extends AppCompatActivity {
                     Ziten realmZiten = realm.where(Ziten.class).equalTo("updateTime", checked_pice.updateTime).findFirst();
 //                    checked_pice.deleteFromRealm();
                     realmZiten.deleteFromRealm();
+                    checked_list.remove(i);
                 }
             }
         });
