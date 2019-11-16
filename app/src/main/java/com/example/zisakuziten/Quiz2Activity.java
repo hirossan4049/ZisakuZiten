@@ -1,15 +1,10 @@
 package com.example.zisakuziten;
 
-import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,16 +13,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import org.w3c.dom.Text;
-
-import java.sql.SQLTransactionRollbackException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class Quiz2Activity extends AppCompatActivity {
@@ -50,7 +42,6 @@ public class Quiz2Activity extends AppCompatActivity {
     public int all_number;
     public int sizeZero;
 
-//    public String answer;
     public Ziten answer_realm;
 
     public List<Ziten> shuffle_items;
@@ -61,7 +52,6 @@ public class Quiz2Activity extends AppCompatActivity {
     public boolean now_quiz_boolean;
 
 
-    public TextView title_zero;
 
 //    public float parsent_number;
 
@@ -93,7 +83,19 @@ public class Quiz2Activity extends AppCompatActivity {
         falseList = new ArrayList<>();
 
         realm = Realm.getDefaultInstance();
-        RealmResults<Ziten> results = realm.where(Ziten.class).findAll();
+//        RealmResults<Ziten> results = realm.where(Ziten.class).findAll();
+        RealmList<Ziten> results = new RealmList<>();
+
+//        Log.d("!!!!!!!!!",getIntent().getStringExtra("updateTimes"));
+
+        if (getIntent().getStringExtra("updateTimes") == "all"){
+            results.addAll(realm.where(Ziten.class).findAll().subList(0, realm.where(Ziten.class).findAll().size()));
+//            results = realm.where(Ziten.class).findAll();
+        }else {
+            Log.e("ERROR!","ERROR!");
+            results = realm.where(Group.class).equalTo("updateTime", getIntent().getStringExtra("updateTime")).findFirst().ziten_updT_List;
+//            results = group.ziten_updT_List;
+        }
         items    = realm.copyFromRealm(results);
         itemsize = items.size();
         sizeZero = 0;

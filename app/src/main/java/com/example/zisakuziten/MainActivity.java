@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -118,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.quiz:
                 Intent quiz_intent = new Intent(this,PlayChoiceActivity.class);
+                                            //group
+                quiz_intent.putExtra("updateTimes","all");
                 startActivity(quiz_intent);
                 break;
             case R.id.store:
