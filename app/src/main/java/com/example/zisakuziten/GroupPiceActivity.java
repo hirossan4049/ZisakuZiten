@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -24,6 +25,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SimpleTimeZone;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -38,7 +40,9 @@ public class GroupPiceActivity extends AppCompatActivity {
     public FloatingActionButton action_button;
     public boolean checkbox_status;
     public List<List> checked_list_data;
-    public List<Ziten> checked_list;
+    public List<String> checked_list;
+    public List<Ziten> items;
+    public ZitenAdapter adapter;
 
 
     @Override
@@ -54,6 +58,8 @@ public class GroupPiceActivity extends AppCompatActivity {
         //0 == GONE ,1 == VISIBLE
         checkbox_status = false;
         checked_list = new ArrayList<>();
+        items = new ArrayList<>();
+
 
 
 
@@ -76,7 +82,7 @@ public class GroupPiceActivity extends AppCompatActivity {
 
                     if (checkview.isChecked() == true){
                         checkview.setChecked(false);
-                        checked_list.remove(checked_list.indexOf(ziten));
+                        checked_list.remove(checked_list.indexOf(ziten.updateTime));
                         Log.d(String.valueOf(checked_list),"checkbox false");
                         if(checked_list.size() == 0){
                             checkbox_status = false;
@@ -85,7 +91,7 @@ public class GroupPiceActivity extends AppCompatActivity {
 
                     }else if(checkview.isChecked() == false) {
                         checkview.setChecked(true);
-                        checked_list.add(ziten);
+                        checked_list.add(ziten.updateTime);
                         Log.d(String.valueOf(checked_list),"checkbox true");
                     }
                 }
@@ -152,6 +158,7 @@ public class GroupPiceActivity extends AppCompatActivity {
                 break;
             case R.id.quiz:
                 Intent quiz_intent = new Intent(this,PlayChoiceActivity.class);
+                quiz_intent.putExtra("updateTime",getIntent().getStringExtra("updateTime"));
                 startActivity(quiz_intent);
                 break;
             case R.id.store:
@@ -178,7 +185,7 @@ public class GroupPiceActivity extends AppCompatActivity {
 
 //        }else {
         RealmList<Ziten> gpList = realm.where(Group.class).equalTo("updateTime", getIntent().getStringExtra("updateTime")).findFirst().ziten_updT_List;
-        List<Ziten> items = realm.copyFromRealm(gpList);
+        items = realm.copyFromRealm(gpList);
 //        }
 
         if (checkbox_status == false){
@@ -190,7 +197,7 @@ public class GroupPiceActivity extends AppCompatActivity {
             action_button.setImageDrawable(drawable);
         }
 
-        ZitenAdapter adapter = new ZitenAdapter(this, R.layout.home_item, items,checkbox_status);
+        adapter = new ZitenAdapter(this, R.layout.home_item, items,checkbox_status);
         listView.setAdapter(adapter);
     }
 
@@ -225,17 +232,24 @@ public class GroupPiceActivity extends AppCompatActivity {
             @Override
             public void execute(Realm realm) {
 
+
                 for(int i = 0; i < checked_list.size(); ++i) {
-                    Ziten checked_pice = checked_list.get(i);
-                    Ziten realmZiten = realm.where(Ziten.class).equalTo("updateTime", checked_pice.updateTime).findFirst();
+                    String checked_pice = checked_list.get(i);
+                    Log.d("Ziten1", checked_pice);
+                    Ziten realmZiten = realm.where(Ziten.class).equalTo("updateTime", checked_pice).findFirst();
 //                    checked_pice.deleteFromRealm();
+//                    items
                     realmZiten.deleteFromRealm();
-                    checked_list.remove(i);
+//                    items.remove(checked_pice);
                 }
+                adapter.notifyDataSetChanged();
+                checked_list.clear();
+
             }
         });
 
 
+        checkbox_status = false;
         setMemoList();
 
 

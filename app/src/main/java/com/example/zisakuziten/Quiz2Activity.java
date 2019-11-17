@@ -86,13 +86,13 @@ public class Quiz2Activity extends AppCompatActivity {
 //        RealmResults<Ziten> results = realm.where(Ziten.class).findAll();
         RealmList<Ziten> results = new RealmList<>();
 
-//        Log.d("!!!!!!!!!",getIntent().getStringExtra("updateTimes"));
+        Log.d("!!!!!!!!!",getIntent().getStringExtra("updateTime"));
 
-        if (getIntent().getStringExtra("updateTimes") == "all"){
+        if (getIntent().getStringExtra("updateTime").equals("all")){
+//        if (getIntent().getStringExtra("updateTime") == getIntent().getStringExtra("updateTime")){
             results.addAll(realm.where(Ziten.class).findAll().subList(0, realm.where(Ziten.class).findAll().size()));
 //            results = realm.where(Ziten.class).findAll();
         }else {
-            Log.e("ERROR!","ERROR!");
             results = realm.where(Group.class).equalTo("updateTime", getIntent().getStringExtra("updateTime")).findFirst().ziten_updT_List;
 //            results = group.ziten_updT_List;
         }

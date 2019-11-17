@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,7 +19,10 @@ import androidx.core.content.res.ResourcesCompat;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import io.realm.Realm;
+
 public class PlayChoiceActivity extends AppCompatActivity {
+    public Realm realm;
     public FloatingActionButton action_button;
     private BottomNavigationView mBottomNav;
 
@@ -30,10 +34,18 @@ public class PlayChoiceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_choice);
 
-
+        realm    = Realm.getDefaultInstance();
         action_button = (FloatingActionButton)findViewById(R.id.action_button);
         Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play, null);
         action_button.setImageDrawable(drawable);
+
+        TextView textView = (TextView)findViewById(R.id.textView);
+        if (getIntent().getStringExtra("updateTime").equals("all")){
+            textView.setText("すべて");
+        }else{
+            String group = realm.where(Group.class).equalTo("updateTime",getIntent().getStringExtra("updateTime")).findFirst().groupName;
+            textView.setText(group);
+        }
 
         mBottomNav = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
         mBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -89,6 +101,7 @@ public class PlayChoiceActivity extends AppCompatActivity {
 
         }else if(displayChar == 2){
             Intent intent = new Intent(this,Quiz2Activity.class);
+            intent.putExtra("updateTime",getIntent().getStringExtra("updateTime"));
             startActivity(intent);
 
         }else if(displayChar == 3){

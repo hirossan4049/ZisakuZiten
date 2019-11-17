@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                         }).show();
-                return false;
+                return true;
             }
         });
 
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.quiz:
                 Intent quiz_intent = new Intent(this,PlayChoiceActivity.class);
                                             //group
-                quiz_intent.putExtra("updateTimes","all");
+                quiz_intent.putExtra("updateTime","all");
                 startActivity(quiz_intent);
                 break;
             case R.id.store:
