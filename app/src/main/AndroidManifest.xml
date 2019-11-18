@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.zisakuziten">
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:name=".ZitenApplication"
@@ -11,9 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:versionName="1.0-beta"
-        >
+
+    >
         <activity android:name=".MainActivity">
 <!--            android:windowSoftInputMode="stateAlwaysHidden">-->
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -29,6 +32,8 @@
         <activity android:name=".Quiz2Activity"/>
         <activity android:name=".StoreActivity"/>
         <activity android:name=".PlayChoiceActivity"/>
+
+
 
     </application>
 

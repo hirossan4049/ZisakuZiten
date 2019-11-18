@@ -1,9 +1,13 @@
 package com.example.zisakuziten;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,6 +47,8 @@ public class GroupPiceActivity extends AppCompatActivity {
     public List<String> checked_list;
     public List<Ziten> items;
     public ZitenAdapter adapter;
+    private Vibrator mVibrator;
+
 
 
     @Override
@@ -60,6 +66,7 @@ public class GroupPiceActivity extends AppCompatActivity {
         checked_list = new ArrayList<>();
         items = new ArrayList<>();
 
+        mVibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
 
 
 
@@ -101,6 +108,7 @@ public class GroupPiceActivity extends AppCompatActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                ((Vibrator) getSystemService(Context.VIBRATOR_SERVICE)).vibrate(100);
                 checkbox_status = true;
                 setMemoList();
                 return false;
