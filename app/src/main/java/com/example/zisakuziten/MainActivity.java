@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 final Group group = (Group)parent.getItemAtPosition(position);
-                final String[] items = {"名前変えたい！", "抹殺するんだ!", "なかったことにする"};
+                final String[] items = {"名前変えたい！", "抹殺するんだ!"};
                 new AlertDialog.Builder(MainActivity.this)
                         .setTitle(group.groupName + "をどうするんや？")
                         .setItems(items, new DialogInterface.OnClickListener() {
