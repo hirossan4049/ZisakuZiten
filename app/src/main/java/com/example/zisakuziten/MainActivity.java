@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 final Group group = (Group)parent.getItemAtPosition(position);
-                ((Vibrator) getSystemService(Context.VIBRATOR_SERVICE)).vibrate(100);
+                ((Vibrator) getSystemService(Context.VIBRATOR_SERVICE)).vibrate(70);
                 final String[] items = {"名前変えたい！", "抹殺するんだ!"};
                 new AlertDialog.Builder(MainActivity.this)
                         .setTitle(group.groupName + "をどうするんや？")
