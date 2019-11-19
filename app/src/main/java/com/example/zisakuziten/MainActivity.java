@@ -1,10 +1,12 @@
 package com.example.zisakuziten;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 final Group group = (Group)parent.getItemAtPosition(position);
+                ((Vibrator) getSystemService(Context.VIBRATOR_SERVICE)).vibrate(100);
                 final String[] items = {"名前変えたい！", "抹殺するんだ!"};
                 new AlertDialog.Builder(MainActivity.this)
                         .setTitle(group.groupName + "をどうするんや？")
