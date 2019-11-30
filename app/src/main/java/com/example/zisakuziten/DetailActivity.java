@@ -3,6 +3,7 @@ package com.example.zisakuziten;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ public class DetailActivity extends AppCompatActivity {
     public Realm realm;
     public EditText titleText;
     public EditText contentText;
+    public Button next_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +24,10 @@ public class DetailActivity extends AppCompatActivity {
         realm       = Realm.getDefaultInstance();
         titleText   = (EditText)findViewById(R.id.titleText);
         contentText = (EditText)findViewById(R.id.contentText);
+
+        next_button = (Button)findViewById(R.id.next);
+        next_button.setVisibility(View.GONE);
+
         showData();
 
     }
