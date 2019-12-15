@@ -99,6 +99,7 @@ public class CreateActivity extends AppCompatActivity {
 
             //save
             save(title, updateDate, content);
+            check(title,updateDate,content);
 
             Log.d("正常","正常にRealmに保存されました、");
             Context context = getApplicationContext();

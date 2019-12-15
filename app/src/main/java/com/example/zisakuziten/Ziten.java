@@ -8,15 +8,12 @@ public class Ziten extends RealmObject {
 
     public String content;
 
-//    public Integer probability;
-//
-//    public Integer all_ans;
-//
-//    public Integer correct_ans;
-
-//    public Integer groupId;
-//    public String groupName;
-
     public String updateTime;
+
+//    public Ziten(String title, String content, String updateTime) {
+//        this.title = title;
+//        this.content = content;
+//        this.updateTime = updateTime;
+//    }
 }
 
