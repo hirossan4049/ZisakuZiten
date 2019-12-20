@@ -12,7 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import io.realm.Realm;
@@ -89,22 +94,23 @@ public class StoreActivity extends AppCompatActivity {
     }
 
     public void download(View v){
-        jsonGet();
+                jsonGet();
 
     }
 
     public void jsonGet(){
-        service.getJson().enqueue(new Callback<List<Group>>() {
+        service.getJson().enqueue(new Callback<Gson>() {
             @Override
-            public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
+            public void onResponse(Call<Gson> call, Response<Gson> response) {
+                Log.d("RESPONSE", String.valueOf(response.body()));
                 if(response.isSuccessful()){
                     Log.d("response","OK");
-                    install(response.body());
+//                    install(response.body());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Group>> call, Throwable t) {
+            public void onFailure(Call<Gson> call, Throwable t) {
                 Log.e("response","ERROR:"+call.request());
             }
         });
@@ -116,10 +122,12 @@ public class StoreActivity extends AppCompatActivity {
             @Override
             public void execute(Realm realm) {
                 Group groupRe = realm.createObject(Group.class);
-                groupRe.groupName = group.get(1).groupName;
-                groupRe.updateTime = group.get(1).updateTime;
-                groupRe.ziten_updT_List = group.get(1).ziten_updT_List;
+                groupRe.groupName = group.get(32).groupName;
+                groupRe.updateTime = group.get(32).updateTime;
+                groupRe.ziten_updT_List = group.get(32).ziten_updT_List;
             }
         });
     }
+
+
 }

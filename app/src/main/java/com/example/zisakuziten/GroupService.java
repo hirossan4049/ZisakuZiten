@@ -2,6 +2,8 @@ package com.example.zisakuziten;
 
 import android.database.Observable;
 
+import com.google.gson.Gson;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +19,8 @@ import retrofit2.http.Path;
 
 public interface GroupService {
     @GET("groups/?format=json")
-    Call<List<Group>> getJson();
+//    Call<List<Group>> getJson();
+    Call<Gson> getJson();
 
     @POST("groups/?format=json")
     @FormUrlEncoded
