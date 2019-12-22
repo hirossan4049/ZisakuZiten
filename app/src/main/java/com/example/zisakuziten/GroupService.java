@@ -20,7 +20,7 @@ import retrofit2.http.Path;
 public interface GroupService {
     @GET("groups/?format=json")
 //    Call<List<Group>> getJson();
-    Call<Gson> getJson();
+    Call<List<Group>> getJson();
 
     @POST("groups/?format=json")
     @FormUrlEncoded

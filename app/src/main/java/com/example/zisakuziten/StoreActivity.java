@@ -19,6 +19,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.zip.ZipEntry;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -94,40 +95,47 @@ public class StoreActivity extends AppCompatActivity {
     }
 
     public void download(View v){
-                jsonGet();
+        jsonGet();
 
     }
 
     public void jsonGet(){
-        service.getJson().enqueue(new Callback<Gson>() {
+        service.getJson().enqueue(new Callback<List<Group>>() {
             @Override
-            public void onResponse(Call<Gson> call, Response<Gson> response) {
+            public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
                 Log.d("RESPONSE", String.valueOf(response.body()));
                 if(response.isSuccessful()){
                     Log.d("response","OK");
-//                    install(response.body());
+                    install(response.body());
                 }
             }
 
             @Override
-            public void onFailure(Call<Gson> call, Throwable t) {
-                Log.e("response","ERROR:"+call.request());
+            public void onFailure(Call<List<Group>> call, Throwable t) {
+                Log.e("response","ERROR:"+t.getMessage());
             }
         });
     }
 
 
-    public void install(final List<Group> group){
+    public void install(final List<Group> groups){
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 Group groupRe = realm.createObject(Group.class);
-                groupRe.groupName = group.get(32).groupName;
-                groupRe.updateTime = group.get(32).updateTime;
-                groupRe.ziten_updT_List = group.get(32).ziten_updT_List;
+                groupRe.groupName = groups.get(2).groupName;
+                groupRe.updateTime = groups.get(2).updateTime;
+                groupRe.ziten_updT_List.addAll(groups.get(2).ziten_updT_List);
             }
         });
+
+
+        Group test = groups.get(2);
+        Log.d("REALM ID2 GET",test.groupName+":"+test.updateTime+":"+test.ziten_updT_List.size()+"");
+        Log.d("REALM","LOCAL SAVE OK!"+groups.get(2).groupName);
     }
+
+
 
 
 }
