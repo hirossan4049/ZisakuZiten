@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.GridView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 
@@ -40,8 +42,11 @@ public class StoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store);
         realm = Realm.getDefaultInstance();
+
+
+        // くるくるするやつ。 Setup refresh listener which triggers new data loading
+        //====================くるくる======================
         final SwipeRefreshLayout swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
-        // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -49,11 +54,14 @@ public class StoreActivity extends AppCompatActivity {
                 swipeContainer.setRefreshing(false);
             }
         });
-        // Configure the refreshing colors
+        // くるくるするやつの色  Configure the refreshing colors
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+        //================================================
+
+        setStore_item();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://zisakuzitenapi2.herokuapp.com/api/")
@@ -94,8 +102,32 @@ public class StoreActivity extends AppCompatActivity {
 
     }
 
+    public void setStore_item(){
+        service.getJson().enqueue(new Callback<List<Group>>() {
+            @Override
+            public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
+                Log.d("RESPONSE", String.valueOf(response.body()));
+                if(response.isSuccessful()){
+                    Log.d("response","OK");
+                    setStore(response.body());
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Group>> call, Throwable t) {
+                Log.e("response","ERROR:"+t.getMessage());
+            }
+        });
+    }
+    public void setStore(List<Group> groups){
+        StoreAdapter storeAdapter = new StoreAdapter(this,R.layout.store_item,groups);
+        GridView gridView = (GridView)findViewById(R.id.gridview);
+        gridView.setAdapter(storeAdapter);
+    }
+
+
+
     public void download(View v){
-        jsonGet();
+//        jsonGet();
 
     }
 
@@ -130,7 +162,7 @@ public class StoreActivity extends AppCompatActivity {
         });
 
 
-        Group test = groups.get(2);
+        Group test = groups.get(0);
         Log.d("REALM ID2 GET",test.groupName+":"+test.updateTime+":"+test.ziten_updT_List.size()+"");
         Log.d("REALM","LOCAL SAVE OK!"+groups.get(2).groupName);
     }
