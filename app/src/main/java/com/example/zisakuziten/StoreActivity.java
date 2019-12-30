@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -20,6 +21,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.zip.ZipEntry;
 
@@ -50,7 +53,8 @@ public class StoreActivity extends AppCompatActivity {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Toast.makeText(getApplicationContext(),"hello",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"reload",Toast.LENGTH_SHORT).show();
+                setStore_item();
                 swipeContainer.setRefreshing(false);
             }
         });
@@ -61,12 +65,13 @@ public class StoreActivity extends AppCompatActivity {
                 android.R.color.holo_red_light);
         //================================================
 
-        setStore_item();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://zisakuzitenapi2.herokuapp.com/api/")
                 .addConverterFactory(GsonConverterFactory.create()).build();
         service = retrofit.create(GroupService.class);
+        setStore_item();
+
 
 
         // navigation selected, selected switch BUN is selectNavigation function
@@ -118,36 +123,24 @@ public class StoreActivity extends AppCompatActivity {
             }
         });
     }
-    public void setStore(List<Group> groups){
+    public void setStore(final List<Group> groups){
         StoreAdapter storeAdapter = new StoreAdapter(this,R.layout.store_item,groups);
         GridView gridView = (GridView)findViewById(R.id.gridview);
-        gridView.setAdapter(storeAdapter);
-    }
-
-
-
-    public void download(View v){
-//        jsonGet();
-
-    }
-
-    public void jsonGet(){
-        service.getJson().enqueue(new Callback<List<Group>>() {
+        Collections.reverse(groups);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
-                Log.d("RESPONSE", String.valueOf(response.body()));
-                if(response.isSuccessful()){
-                    Log.d("response","OK");
-                    install(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Group>> call, Throwable t) {
-                Log.e("response","ERROR:"+t.getMessage());
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //item click -> preview :)
+                Log.d("STOREACTIVITY","position"+ groups.get(position));
+                //=================!!!!!!!!!!!!!!!====================
             }
         });
+        gridView.setAdapter(storeAdapter);
+
     }
+
+
+
 
 
     public void install(final List<Group> groups){

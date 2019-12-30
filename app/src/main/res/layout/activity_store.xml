@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
     <!--    <android.support.v7.widget.RecyclerView-->
     <!--        android:id="@+id/recyclerview_id"-->
@@ -17,7 +18,18 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
-        android:layout_height="621dp">
+        android:layout_height="621dp"
+        android:padding="10dp">
+
+        <GridView
+            android:id="@+id/gridview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:horizontalSpacing="10dp"
+            android:numColumns="2"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="10dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvItems"
@@ -36,16 +48,15 @@
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottom_app_bar4"
-            tools:ignore="BottomAppBar"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="1dp"
             app:backgroundTint="#008577"
             app:fabAlignmentMode="end"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="BottomAppBar">
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottomNavigationView"
@@ -56,21 +67,6 @@
                 app:menu="@menu/bnv_menu" />
 
         </com.google.android.material.bottomappbar.BottomAppBar>
-
-
-        <GridView
-            android:id="@+id/gridview"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:gravity="center"
-            android:horizontalSpacing="1dp"
-            android:numColumns="2"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="1dp"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_app_bar4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
