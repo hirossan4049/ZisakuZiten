@@ -7,28 +7,6 @@
     android:animateLayoutChanges="true"
     android:orientation="vertical">
 
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottom_app_bar3"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="1dp"
-        app:backgroundTint="#008577"
-        app:fabAlignmentMode="end"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="BottomAppBar">
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavigationView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:itemIconTint="#ffffff"
-            app:itemTextColor="#ffffff"
-            app:menu="@menu/bnv_menu" />
-
-    </com.google.android.material.bottomappbar.BottomAppBar>
-
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
@@ -173,10 +151,10 @@
         android:id="@+id/linearLayout7"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
 
+        android:layout_marginBottom="8dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout6"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -202,7 +180,6 @@
                 android:layout_marginLeft="32dp"
                 android:layout_weight="1"
                 android:insetRight="5dp"
-                android:onClick="titleText_one"
                 android:text="1"
                 android:textSize="30dp" />
 
@@ -214,7 +191,6 @@
                 android:layout_marginRight="32dp"
                 android:layout_weight="1"
                 android:insetLeft="5dp"
-                android:onClick="titleText_two"
                 android:text="2"
                 android:textSize="30dp" />
         </LinearLayout>
@@ -240,7 +216,6 @@
                 android:layout_marginLeft="32dp"
                 android:layout_weight="1"
                 android:insetRight="5dp"
-                android:onClick="titleText_three"
                 android:text="3"
                 android:textSize="30dp" />
 
@@ -252,40 +227,9 @@
                 android:layout_marginRight="32dp"
                 android:layout_weight="1"
                 android:insetLeft="5dp"
-                android:onClick="titleText_four"
                 android:text="4"
                 android:textSize="30dp" />
         </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_app_bar3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/button5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="14dp"
-            android:layout_weight="1"
-            android:onClick="exit"
-            android:text="戻る" />
-
-        <Button
-            android:id="@+id/button6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="14dp"
-            android:layout_weight="1"
-            android:onClick="next"
-            android:text="次へ！" />
 
     </LinearLayout>
 

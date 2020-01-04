@@ -3,11 +3,14 @@ package com.example.zisakuziten;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,25 +20,30 @@ import java.util.Locale;
 import io.realm.Realm;
 import io.realm.RealmList;
 
-public class GroupCreateActivity extends AppCompatActivity {
+public class GroupCreateActivity extends Fragment {
     public EditText titleText;
 
     public Realm realm;
+    public ViewGroup containerp;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_group_create);
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        Log.d("GROUPCREATEACTIVITY","Oncreate");
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.activity_group_create, container, false);
+        containerp = container;
         //open realm
         realm = Realm.getDefaultInstance();
 
-        titleText = (EditText) findViewById(R.id.titleText);
+        titleText = (EditText) containerp.findViewById(R.id.titleText);
+        return view;
     }
 
     //app close ,realm close
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         realm.close();
     }
@@ -68,7 +76,7 @@ public class GroupCreateActivity extends AppCompatActivity {
 
         //null判定
         if (title.length() <= 1) {
-            Context context = getApplicationContext();
+            Context context = containerp.getContext().getApplicationContext();
             Toast.makeText(context, "タイトルは2文字以上入力してね！", Toast.LENGTH_SHORT).show();
         } else {
 
@@ -81,9 +89,9 @@ public class GroupCreateActivity extends AppCompatActivity {
             save(title, updateDate);
 
             Log.d("正常", "正常にRealmに保存されました、");
-            Context context = getApplicationContext();
+            Context context = containerp.getContext().getApplicationContext();
             Toast.makeText(context, "保存成功！", Toast.LENGTH_LONG).show();
-            finish();
+            //finish
 
         }
     }

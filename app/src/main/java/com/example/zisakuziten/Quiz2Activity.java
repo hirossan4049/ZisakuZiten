@@ -3,13 +3,16 @@ package com.example.zisakuziten;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -22,7 +25,7 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
-public class Quiz2Activity extends AppCompatActivity {
+public class Quiz2Activity extends Fragment {
     Realm realm;
     public List<Ziten> items;
     public int itemsize;
@@ -50,6 +53,8 @@ public class Quiz2Activity extends AppCompatActivity {
 
     // true == falseList_main ,false == nomal.
     public boolean now_quiz_boolean;
+    //once
+    public boolean random_loop;
 
 
 
@@ -57,24 +62,22 @@ public class Quiz2Activity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quiz_main);
-        contentText     = (TextView) findViewById(R.id.content_text);
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,Bundle saveInstanceState){
+        View view = inflater.inflate(R.layout.activity_quiz_main,container,false);
+        contentText     = (TextView) view.findViewById(R.id.content_text);
 
-        titleText_one   = (TextView)findViewById(R.id.title_one);
-        titleText_two   = (TextView)findViewById(R.id.title_two);
-        titleText_three = (TextView)findViewById(R.id.title_three);
-        titleText_four  = (TextView)findViewById(R.id.title_four);
+        titleText_one   = (TextView)view.findViewById(R.id.title_one);
+        titleText_two   = (TextView)view.findViewById(R.id.title_two);
+        titleText_three = (TextView)view.findViewById(R.id.title_three);
+        titleText_four  = (TextView)view.findViewById(R.id.title_four);
 
-//        title_zero = (TextView)findViewById(R.id.title_zero);
+//        title_zero = (TextView)view.findViewById(R.id.title_zero);
 
-//        title_one.setText("hello world");
+        random_loop = false;
 
-
-        correct_num  = (TextView)findViewById(R.id.correct_num);
-        all_num      = (TextView)findViewById(R.id.all_num);
-        parsent_num  = (TextView)findViewById(R.id.parsent_num);
+        correct_num  = (TextView)view.findViewById(R.id.correct_num);
+        all_num      = (TextView)view.findViewById(R.id.all_num);
+        parsent_num  = (TextView)view.findViewById(R.id.parsent_num);
         correct_number = 0;
         all_number     = 0;
 //        parsent_number = 0;
@@ -86,16 +89,8 @@ public class Quiz2Activity extends AppCompatActivity {
 //        RealmResults<Ziten> results = realm.where(Ziten.class).findAll();
         RealmList<Ziten> results = new RealmList<>();
 
-        Log.d("!!!!!!!!!",getIntent().getStringExtra("updateTime"));
-
-        if (getIntent().getStringExtra("updateTime").equals("all")){
-//        if (getIntent().getStringExtra("updateTime") == getIntent().getStringExtra("updateTime")){
-            results.addAll(realm.where(Ziten.class).findAll().subList(0, realm.where(Ziten.class).findAll().size()));
-//            results = realm.where(Ziten.class).findAll();
-        }else {
-            results = realm.where(Group.class).equalTo("updateTime", getIntent().getStringExtra("updateTime")).findFirst().ziten_updT_List;
-//            results = group.ziten_updT_List;
-        }
+//        Log.d("!!!!!!!!!",getIntent().getStringExtra("updateTime"));
+        results = realm.where(Group.class).equalTo("updateTime", getArguments().getString("updateTime")).findFirst().ziten_updT_List;
         items    = realm.copyFromRealm(results);
         itemsize = items.size();
         sizeZero = 0;
@@ -103,40 +98,59 @@ public class Quiz2Activity extends AppCompatActivity {
 
         main();
 
-        // navigation selected, selected switch BUN is selectNavigation function
-        mBottomNav = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
-        mBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        view.findViewById(R.id.one_btn).setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                selectNavigation(item);
-                return true;
+            public void onClick(View v) {
+                if (titleText_one.getText() == answer_realm.title){
+                    correct();
+                }else{
+                    incorrect();
+                }
+            }
+        });
+        view.findViewById(R.id.two_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (titleText_two.getText() == answer_realm.title){
+                    correct();
+                }else{
+                    incorrect();
+                }
+            }
+        });
+        view.findViewById(R.id.three_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (titleText_three.getText() == answer_realm.title){
+                    correct();
+                }else{
+                    incorrect();
+                }
+            }
+        });
+        view.findViewById(R.id.four_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (titleText_four.getText() == answer_realm.title){
+                    correct();
+                }else{
+                    incorrect();
+                }
             }
         });
 
+    return view;
     }
 
 
-    // navigation view selected
-    private void selectNavigation(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.home:
-                finish();
-                break;
-            case R.id.quiz:
-                break;
-            case R.id.store:
-                Intent store_intent = new Intent(this,StoreActivity.class);
-                startActivity(store_intent);
-                break;
-        }
 
-    }
+    
     public void main(){
         Log.d("ITEMSIZE", String.valueOf(itemsize));
         if (itemsize <= 3){
             Log.d("NOT ITEM","OH>< ITEM NOT FOUND.");
-            Toast.makeText(this, "4つ以上作成してください！", Toast.LENGTH_LONG).show();
-            finish();
+            Toast.makeText(getContext(), "4つ以上作成してください！", Toast.LENGTH_LONG).show();
+//            finish();
         }else {
 
             all_number++;
@@ -150,8 +164,12 @@ public class Quiz2Activity extends AppCompatActivity {
                         sizeZero ++;
                         farst_main();
                         if(sizeZero >= itemsize){
-                            Toast.makeText(this,"完璧です！！(この先はランダムに出題します。）",Toast.LENGTH_LONG).show();
-                            farst_main();
+                            if(random_loop == true){farst_main();}
+                            else{
+                                random_loop = true;
+                                Toast.makeText(getContext(), "完璧です！！(この先はランダムに出題します。）", Toast.LENGTH_LONG).show();
+                                farst_main();
+                            }
                         }
                     } else {
                         falseList_main();
@@ -243,7 +261,7 @@ public class Quiz2Activity extends AppCompatActivity {
 
 
     public void correct(){
-        Toast.makeText(this, "正解！", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "正解！", Toast.LENGTH_SHORT).show();
 
         correct_number += 1;
         falseList.remove(answer_realm);
@@ -257,7 +275,7 @@ public class Quiz2Activity extends AppCompatActivity {
     }
 
     public void incorrect(){
-        Toast.makeText(this, "不正解...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "不正解...", Toast.LENGTH_SHORT).show();
 
         trueList.remove(answer_realm);
         falseList.add(answer_realm);
@@ -277,34 +295,6 @@ public class Quiz2Activity extends AppCompatActivity {
     }
 
 
-    public void titleText_one(View v){
-        if (titleText_one.getText() == answer_realm.title){
-            correct();
-        }else{
-            incorrect();
-        }
-    }
-    public void titleText_two(View v){
-        if (titleText_two.getText() == answer_realm.title){
-            correct();
-        }else{
-            incorrect();
-        }
-    }
-    public void titleText_three(View v){
-        if (titleText_three.getText() == answer_realm.title){
-            correct();
-        }else{
-            incorrect();
-        }
-    }
-    public void titleText_four(View v){
-        if (titleText_four.getText() == answer_realm.title){
-            correct();
-        }else{
-            incorrect();
-        }
-    }
 
     public void next(View v){
         main();
@@ -312,7 +302,7 @@ public class Quiz2Activity extends AppCompatActivity {
 
 
     public void exit(View v){
-        finish();
+//        finish();
     }
 
 

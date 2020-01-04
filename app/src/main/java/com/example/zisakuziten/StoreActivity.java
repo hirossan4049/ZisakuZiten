@@ -3,14 +3,17 @@ package com.example.zisakuziten;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -34,26 +37,25 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class StoreActivity extends AppCompatActivity {
+public class StoreActivity extends Fragment {
     private BottomNavigationView mBottomNav;
     public GroupService service;
     public Realm realm;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_store);
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,Bundle saveInstanceState){
+        View view = inflater.inflate(R.layout.activity_store,container,false);
         realm = Realm.getDefaultInstance();
 
 
         // くるくるするやつ。 Setup refresh listener which triggers new data loading
         //====================くるくる======================
-        final SwipeRefreshLayout swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        final SwipeRefreshLayout swipeContainer = (SwipeRefreshLayout)view.findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Toast.makeText(getApplicationContext(),"reload",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"reload",Toast.LENGTH_SHORT).show();
                 setStore_item();
                 swipeContainer.setRefreshing(false);
             }
@@ -66,48 +68,30 @@ public class StoreActivity extends AppCompatActivity {
         //================================================
 
 
+    return view;
+    }
+
+    public void onStart() {
+        super.onStart();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://zisakuzitenapi2.herokuapp.com/api/")
                 .addConverterFactory(GsonConverterFactory.create()).build();
         service = retrofit.create(GroupService.class);
         setStore_item();
-
-
-
-        // navigation selected, selected switch BUN is selectNavigation function
-        mBottomNav = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
-        mBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                selectNavigation(item);
-                return true;
-            }
-        });
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         realm.close();
     }
 
 
-    // navigation view selected
-    private void selectNavigation(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.home:
-                break;
-            case R.id.quiz:
-                Intent quiz_intent = new Intent(this,QuizActivity.class);
-                startActivity(quiz_intent);
-                break;
-            case R.id.store:
-                break;
-        }
-
-    }
 
     public void setStore_item(){
+        Log.d("StoreActivity","setStore!");
+        getActivity().findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+        getActivity().findViewById(R.id.c_acsess_text).setVisibility(View.GONE);
         service.getJson().enqueue(new Callback<List<Group>>() {
             @Override
             public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
@@ -115,17 +99,20 @@ public class StoreActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
                     Log.d("response","OK");
                     setStore(response.body());
+                    getActivity().findViewById(R.id.progressBar).setVisibility(View.GONE);
                 }
             }
             @Override
             public void onFailure(Call<List<Group>> call, Throwable t) {
                 Log.e("response","ERROR:"+t.getMessage());
+                getActivity().findViewById(R.id.progressBar).setVisibility(View.GONE);
+                getActivity().findViewById(R.id.c_acsess_text).setVisibility(View.VISIBLE);
             }
         });
     }
     public void setStore(final List<Group> groups){
-        StoreAdapter storeAdapter = new StoreAdapter(this,R.layout.store_item,groups);
-        GridView gridView = (GridView)findViewById(R.id.gridview);
+        StoreAdapter storeAdapter = new StoreAdapter(getContext(),R.layout.store_item,groups);
+        GridView gridView = (GridView)getActivity().findViewById(R.id.gridview);
         Collections.reverse(groups);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

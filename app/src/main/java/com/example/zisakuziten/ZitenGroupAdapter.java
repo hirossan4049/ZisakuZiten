@@ -37,22 +37,6 @@ public class ZitenGroupAdapter extends ArrayAdapter<Group> {
         }
 
         TextView titleText   = (TextView) convertView.findViewById(R.id.titleText);
-//        TextView contentText = (TextView) convertView.findViewById(R.id.contentText);
-        CheckBox checkBox    = (CheckBox) convertView.findViewById(R.id.checkBox);
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-            }
-        });
-
-        //atode boolean ni
-        if (checkbox == 0) {
-            checkBox.setVisibility(View.INVISIBLE);
-        }
-        else if(checkbox == 1){
-            checkBox.setVisibility(View.VISIBLE);
-        }
 
         titleText.setText(String.valueOf(group.groupName));
 

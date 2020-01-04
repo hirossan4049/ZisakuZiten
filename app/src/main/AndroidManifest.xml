@@ -36,6 +36,7 @@
         <activity android:name=".Quiz2Activity"/>
         <activity android:name=".StoreActivity"/>
         <activity android:name=".PlayChoiceActivity"/>
+        <activity android:name=".GroupActivity"/>
 
 
 

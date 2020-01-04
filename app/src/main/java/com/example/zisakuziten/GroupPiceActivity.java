@@ -1,41 +1,51 @@
 package com.example.zisakuziten;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toolbar;
 import android.widget.ZoomControls;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.SimpleTimeZone;
 
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
-public class GroupPiceActivity extends AppCompatActivity {
+public class GroupPiceActivity extends Fragment {
 
     public Realm realm;
     public ListView listView;
@@ -52,24 +62,20 @@ public class GroupPiceActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ziten);
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,Bundle saveInstanceState){
+        View view = inflater.inflate(R.layout.activity_ziten,container,false);
 
         //openRealm
         realm    = Realm.getDefaultInstance();
-        listView = (ListView)findViewById(R.id.listView);
-        checkBox = (CheckBox) findViewById(R.id.checkBox);
-        action_button = (FloatingActionButton)findViewById(R.id.action_button);
+        listView = (ListView)view.findViewById(R.id.listView);
+        checkBox = (CheckBox) view.findViewById(R.id.checkBox);
+        action_button = (FloatingActionButton)view.findViewById(R.id.action_button);
         //0 == GONE ,1 == VISIBLE
         checkbox_status = false;
         checked_list = new ArrayList<>();
         items = new ArrayList<>();
 
-        mVibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
-
-
-
+//        mVibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
 
         //clickで編集
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -77,7 +83,7 @@ public class GroupPiceActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (checkbox_status == false) {
                     Ziten ziten = (Ziten) parent.getItemAtPosition(position);
-                    Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                    Intent intent = new Intent(getContext(), DetailActivity.class);
                     intent.putExtra("updateTime", ziten.updateTime);
 
                     startActivity(intent);
@@ -108,74 +114,104 @@ public class GroupPiceActivity extends AppCompatActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                ((Vibrator) getSystemService(Context.VIBRATOR_SERVICE)).vibrate(100);
+//                ((Vibrator) getSystemService(Context.VIBRATOR_SERVICE)).vibrate(100);
+                Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(100);
+
                 checkbox_status = true;
                 setMemoList();
                 return false;
             }
         });
 
-        // navigation selected, selected switch BUN is selectNavigation function
-        mBottomNav = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
-        mBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        //back button onclick
+        view.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                selectNavigation(item);
-                return true;
+            public void onClick(View v) {
+                Fragment fragment = new GroupActivity();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.frameLayout,fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+
+        //create button onClick
+        view.findViewById(R.id.action_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            if (checkbox_status == false) {
+
+                final Dialog dialog = new Dialog(getActivity());
+                dialog.setContentView(R.layout.ziten_create_dialog);
+                dialog.setTitle("辞典を作成");
+                Button addBtn = dialog.findViewById(R.id.add);
+                addBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final EditText titleEdit = dialog.findViewById(R.id.titleEdit);
+                        final EditText contentEdit = dialog.findViewById(R.id.contentEdit);
+                        String title = titleEdit.getText().toString();
+                        String content = contentEdit.getText().toString();
+                        create(title,content);
+                        setMemoList();
+                        dialog.dismiss();
+                    }
+                });
+                Button nextBtn = dialog.findViewById(R.id.next);
+                nextBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final EditText titleEdit = dialog.findViewById(R.id.titleEdit);
+                        final EditText contentEdit = dialog.findViewById(R.id.contentEdit);
+                        String title = titleEdit.getText().toString();
+                        String content = contentEdit.getText().toString();
+                        create(title,content);
+                        titleEdit.setText("");
+                        contentEdit.setText("");
+                    }
+                });
+                dialog.show();
+
+            }else if(checkbox_status == true){
+                delete();
+            }
+            }
+
+
+        });
+
+    return view;
+    }
+
+    // メニューを作成する
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.home_menu, menu);
+//        return true;
+//    }
+
+
+
+    public void create(final String title, final String content){
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss", Locale.JAPANESE);
+        final String updateTime = sdf.format(date);
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Ziten ziten = realm.createObject(Ziten.class);
+                ziten.title = title;
+                ziten.content = content;
+                ziten.updateTime = updateTime;
+
+                final Group group = realm.where(Group.class)
+                        .equalTo("updateTime",getArguments().getString("updateTime")).findFirst();
+                group.ziten_updT_List.add(ziten);
             }
         });
     }
 
-    // メニューを作成する
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.home_menu, menu);
-        return true;
-    }
-
-    // メニューアイテム選択イベント（メニューが選択された時に呼ばれる）
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.item1:
-//                checkBox.setVisibility(View.VISIBLE);
-                checkbox_status = true;
-                setMemoList();
-                // ここに設定タンがタップされた時に実行する処理を追加する
-                break;
-            case R.id.item2:
-                break;
-            case R.id.item3:
-                // 終了ボタンがタップされた時の処理
-                finish();
-                break;
-        }
-
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    // navigation view selected
-    private void selectNavigation(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.home:
-                checkbox_status = false;
-                setMemoList();
-//                Intent intent = new Intent(this,MainActivity.class);
-//                startActivity(intent);
-                break;
-            case R.id.quiz:
-                Intent quiz_intent = new Intent(this,PlayChoiceActivity.class);
-                quiz_intent.putExtra("updateTime",getIntent().getStringExtra("updateTime"));
-                startActivity(quiz_intent);
-                break;
-            case R.id.store:
-                Intent store_intent = new Intent(this,StoreActivity.class);
-                startActivity(store_intent);
-                break;
-        }
-
-    }
 
 
 
@@ -192,7 +228,9 @@ public class GroupPiceActivity extends AppCompatActivity {
 //            Log.d("EEEEEE","!!!!!!!!!!!!!!!!!!!!!!!");
 
 //        }else {
-        RealmList<Ziten> gpList = realm.where(Group.class).equalTo("updateTime", getIntent().getStringExtra("updateTime")).findFirst().ziten_updT_List;
+        Bundle bundle = getArguments();
+        RealmList<Ziten> gpList = realm.where(Group.class)
+                .equalTo("updateTime",bundle.getString("updateTime")).findFirst().ziten_updT_List;
         items = realm.copyFromRealm(gpList);
 //        }
 
@@ -205,34 +243,34 @@ public class GroupPiceActivity extends AppCompatActivity {
             action_button.setImageDrawable(drawable);
         }
 
-        adapter = new ZitenAdapter(this, R.layout.home_item, items,checkbox_status);
+        adapter = new ZitenAdapter(getContext(), R.layout.home_item, items,checkbox_status);
         listView.setAdapter(adapter);
     }
 
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         checkbox_status = false;
         setMemoList();
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         realm.close();
     }
 
 
-    public void create(View view){
-        if (checkbox_status == false) {
-            Intent intent = new Intent(this, CreateActivity.class);
-            intent.putExtra("gpupdateTime",getIntent().getStringExtra("updateTime"));
-            startActivity(intent);
-        }else if(checkbox_status == true){
-            delete();
-        }
-    }
+//    public void create(View view){
+//        if (checkbox_status == false) {
+////            Intent intent = new Intent(getContext(), CreateActivity.class);
+////            intent.putExtra("gpupdateTime",getIntent().getStringExtra("updateTime"));
+////            startActivity(intent);
+//        }else if(checkbox_status == true){
+//            delete();
+//        }
+//    }
 
     public void delete(){
 //        setMemoList();
@@ -255,17 +293,12 @@ public class GroupPiceActivity extends AppCompatActivity {
 
             }
         });
-
-
         checkbox_status = false;
         setMemoList();
 
 
     }
 
-    public void back(View v){
-        finish();
-    }
 
 
 }
