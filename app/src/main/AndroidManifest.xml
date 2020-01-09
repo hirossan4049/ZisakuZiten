@@ -37,6 +37,7 @@
         <activity android:name=".StoreActivity"/>
         <activity android:name=".PlayChoiceActivity"/>
         <activity android:name=".GroupActivity"/>
+        <activity android:name=".DownloadPreviewActivity"/>
 
 
 

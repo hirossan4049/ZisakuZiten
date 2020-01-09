@@ -161,6 +161,7 @@ public class GroupActivity extends Fragment {
                                 group.ziten_updT_List = new RealmList<Ziten>();
                             }
                         });
+                        setGroupList();
                         dialog.dismiss();
                     }
                 });

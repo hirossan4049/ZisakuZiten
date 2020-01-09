@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -120,6 +121,11 @@ public class StoreActivity extends Fragment {
                 //item click -> preview :)
                 Log.d("STOREACTIVITY","position"+ groups.get(position));
                 //=================!!!!!!!!!!!!!!!====================
+                Fragment fragment = new DownloadPreviewActivity();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.frameLayout,fragment );
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
         gridView.setAdapter(storeAdapter);
