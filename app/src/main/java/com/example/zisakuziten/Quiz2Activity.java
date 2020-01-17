@@ -1,6 +1,7 @@
 package com.example.zisakuziten;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +34,7 @@ public class Quiz2Activity extends Fragment {
     public int itemsize;
     public int answer_int;
     public Handler handler;
+    public ImageView correctImg;
 
     public TextView contentText;
     public TextView titleText_one;
@@ -73,6 +76,8 @@ public class Quiz2Activity extends Fragment {
         titleText_two   = (TextView)view.findViewById(R.id.title_two);
         titleText_three = (TextView)view.findViewById(R.id.title_three);
         titleText_four  = (TextView)view.findViewById(R.id.title_four);
+
+        correctImg = (ImageView)view.findViewById(R.id.correctImg);
 
 //        title_zero = (TextView)view.findViewById(R.id.title_zero);
 
@@ -264,7 +269,6 @@ public class Quiz2Activity extends Fragment {
 
 
     public void correct(){
-        Toast.makeText(getContext(), "正解！", Toast.LENGTH_SHORT).show();
         correct_number += 1;
         falseList.remove(answer_realm);
         trueList.add(answer_realm);
@@ -277,11 +281,9 @@ public class Quiz2Activity extends Fragment {
     }
 
     public void incorrect(){
-        Toast.makeText(getContext(), "不正解...", Toast.LENGTH_SHORT).show();
-
         trueList.remove(answer_realm);
         falseList.add(answer_realm);
-
+        correctOnDisplay(false);
         int parsent_number = (int) Math.floor((float) correct_number/all_number * 100);
         all_num.setText(String.valueOf(all_number));
         parsent_num.setText(parsent_number+"%");
@@ -290,6 +292,13 @@ public class Quiz2Activity extends Fragment {
     }
 
     public void correctOnDisplay(boolean correct){
+        buttonEnabled(false);
+        if (correct){
+            correctImg.setImageResource(R.drawable.ic_correct);
+        }else{
+            correctImg.setImageResource(R.drawable.ic_incorrect);
+        }
+        correctImg.setVisibility(View.VISIBLE);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -298,13 +307,13 @@ public class Quiz2Activity extends Fragment {
                     public void run() {
                         Log.d("Quiz2Activity","correctOnDisplay Thread");
                         try {
-                            buttonEnabled(false);
                             Thread.sleep(1000);
-                            buttonEnabled(true);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                         Log.d("Quiz2Activity","correctOnDisplay Thread END");
+                        buttonEnabled(true);
+                        correctImg.setVisibility(View.GONE);
 
                     }
                 });
