@@ -1,5 +1,6 @@
 package com.example.zisakuziten;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,16 +9,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -32,6 +37,7 @@ import java.util.zip.ZipEntry;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,7 +54,6 @@ public class StoreActivity extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,Bundle saveInstanceState){
         View view = inflater.inflate(R.layout.activity_store,container,false);
         realm = Realm.getDefaultInstance();
-
 
         // くるくるするやつ。 Setup refresh listener which triggers new data loading
         //====================くるくる======================
@@ -69,16 +74,70 @@ public class StoreActivity extends Fragment {
         //================================================
 
 
-    return view;
-    }
 
-    public void onStart() {
-        super.onStart();
+        view.findViewById(R.id.action_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Dialog dialog = new Dialog(getActivity());
+                dialog.setContentView(R.layout.play_group_dialog);
+                final RealmResults<Group> group = realm.where(Group.class).findAll();
+                ListView listView = (ListView)dialog.findViewById(R.id.group_listView);
+                List list = new ArrayList<String>();
+                for(int i = 0; i < group.size();i++){
+                    list.add(group.get(i).groupName);
+                }
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,list);
+                listView.setAdapter(arrayAdapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        //Realm Group Name selected...
+                        final Group group_item = group.get(position);
+
+                        //GroupのNameとupdateTimeをPOSTしてidをいただく
+                        Call<Group> Groupcall = service.saveGPost(group_item.groupName,group_item.updateTime);
+                        Groupcall.enqueue(new Callback<Group>() {
+                            @Override
+                            public void onResponse(Call<Group> call, Response<Group> response) {
+                                Log.d("StoreActivity","upload成功(Group)"+response.body().apiId);
+
+                                //Ziten達をPOST
+//                                Call <Ziten> zitenCall = service.saveZPost()
+                            }
+
+                            @Override
+                            public void onFailure(Call<Group> call, Throwable t) {
+                                Log.e("StoreActivity","uploadに失敗(Group)"+call);
+                            }
+                        });
+
+                        dialog.dismiss();
+
+                    };
+                });
+                dialog.show();
+            }//!
+        });
+
+
+
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://zisakuzitenapi2.herokuapp.com/api/")
                 .addConverterFactory(GsonConverterFactory.create()).build();
         service = retrofit.create(GroupService.class);
+
+    return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle saveInstanceState){
+        super.onActivityCreated(saveInstanceState);
         setStore_item();
+    }
+
+    public void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -90,6 +149,7 @@ public class StoreActivity extends Fragment {
 
 
     public void setStore_item(){
+        //getActivityはonCreateViewの段階だとActivityが生成されてないからonActivityCreated()で。
         Log.d("StoreActivity","setStore!");
         getActivity().findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
         getActivity().findViewById(R.id.c_acsess_text).setVisibility(View.GONE);
@@ -122,6 +182,9 @@ public class StoreActivity extends Fragment {
                 Log.d("STOREACTIVITY","position"+ groups.get(position));
                 //=================!!!!!!!!!!!!!!!====================
                 Fragment fragment = new DownloadPreviewActivity();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Group",groups.get(position));
+                fragment.setArguments(bundle);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.frameLayout,fragment );
                 transaction.addToBackStack(null);

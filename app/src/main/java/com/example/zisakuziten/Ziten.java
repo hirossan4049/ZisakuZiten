@@ -1,8 +1,10 @@
 package com.example.zisakuziten;
 
+import java.io.Serializable;
+
 import io.realm.RealmObject;
 
-public class Ziten extends RealmObject {
+public class Ziten extends RealmObject implements Serializable {
 
     public String title;
 

@@ -44,7 +44,7 @@ public class PlayChoiceActivity extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,Bundle saveInstanceState){
         View view = inflater.inflate(R.layout.activity_play_choice,container,false);
-        realm    = Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
         //        action_button = (FloatingActionButton)getActivity().findViewById(R.id.action_button);
         //        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play, null);
         //        action_button.setImageDrawable(drawable);
@@ -119,6 +119,7 @@ public class PlayChoiceActivity extends Fragment {
 
                 }else if(displayChar == 3){
                     dialog.dismiss();
+                    Toast.makeText(getContext(),"comming soon...",Toast.LENGTH_LONG).show();
                 }else{
                     Toast.makeText(getContext(),"どれか一つを選択してください。",Toast.LENGTH_SHORT).show();
                 }

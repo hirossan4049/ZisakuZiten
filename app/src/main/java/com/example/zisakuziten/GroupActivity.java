@@ -15,6 +15,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -63,7 +65,13 @@ public class GroupActivity extends Fragment {
             checkbox_status = 0;
             checked_list = new ArrayList<>();
 
-
+            //toooooolbarrrrr
+            AppCompatActivity activity = (AppCompatActivity)getActivity();
+            ActionBar actionBar = activity.getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setHomeButtonEnabled(false);
+            setHasOptionsMenu(false);
+            actionBar.setTitle("Group");
 
 
 

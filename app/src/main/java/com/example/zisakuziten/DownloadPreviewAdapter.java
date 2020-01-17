@@ -15,7 +15,7 @@ import org.w3c.dom.Text;
 import retrofit2.http.POST;
 
 public class DownloadPreviewAdapter extends RecyclerView.Adapter<DownloadPreviewAdapter.ViewHolder> {
-    private String[] dataset = new String[20];
+    private Group dataset;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView tTextView;
@@ -28,7 +28,7 @@ public class DownloadPreviewAdapter extends RecyclerView.Adapter<DownloadPreview
         }
     }
 
-    DownloadPreviewAdapter(String[] myDataset){
+    DownloadPreviewAdapter(Group myDataset){
         dataset = myDataset;
     }
 
@@ -42,14 +42,15 @@ public class DownloadPreviewAdapter extends RecyclerView.Adapter<DownloadPreview
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.tTextView.setText(dataset[position]);
-        holder.cTextView.setText(dataset[position]);
-        Log.d("DownloadPreviewAdapter",dataset[position]);
+        holder.tTextView.setText(dataset.ziten_updT_List.get(position).title);
+        holder.cTextView.setText(dataset.ziten_updT_List.get(position).content);
+
+//        Log.d("DownloadPreviewAdapter",dataset[position]);
     }
 
     @Override
     public int getItemCount(){
-        return dataset.length;
+        return dataset.ziten_updT_List.size();
     }
 
 

@@ -34,7 +34,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_scrollFlags="scroll|enterAlways|snap">
+            app:layout_scrollFlags="scroll|enterAlways">
+<!--            app:layout_scrollFlags="scroll|enterAlways|snap">-->
 
             <LinearLayout
                 android:id="@+id/linearLayout8"
@@ -53,7 +54,7 @@
                     android:background="@android:color/darker_gray" />
 
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/download_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"

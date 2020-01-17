@@ -2,6 +2,7 @@ package com.example.zisakuziten;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -30,7 +31,7 @@ public class Quiz2Activity extends Fragment {
     public List<Ziten> items;
     public int itemsize;
     public int answer_int;
-    private BottomNavigationView mBottomNav;
+    public Handler handler;
 
     public TextView contentText;
     public TextView titleText_one;
@@ -65,6 +66,8 @@ public class Quiz2Activity extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,Bundle saveInstanceState){
         View view = inflater.inflate(R.layout.activity_quiz_main,container,false);
         contentText     = (TextView) view.findViewById(R.id.content_text);
+
+        handler = new Handler();
 
         titleText_one   = (TextView)view.findViewById(R.id.title_one);
         titleText_two   = (TextView)view.findViewById(R.id.title_two);
@@ -262,11 +265,10 @@ public class Quiz2Activity extends Fragment {
 
     public void correct(){
         Toast.makeText(getContext(), "正解！", Toast.LENGTH_SHORT).show();
-
         correct_number += 1;
         falseList.remove(answer_realm);
         trueList.add(answer_realm);
-
+        correctOnDisplay(true);
         int parsent_number = (int) Math.floor((float) correct_number/all_number * 100);
         correct_num.setText(String.valueOf(correct_number));
         all_num.setText(String.valueOf(all_number));
@@ -287,6 +289,36 @@ public class Quiz2Activity extends Fragment {
 
     }
 
+    public void correctOnDisplay(boolean correct){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d("Quiz2Activity","correctOnDisplay Thread");
+                        try {
+                            buttonEnabled(false);
+                            Thread.sleep(1000);
+                            buttonEnabled(true);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        Log.d("Quiz2Activity","correctOnDisplay Thread END");
+
+                    }
+                });
+            }
+        }).start();
+    }
+
+    public void buttonEnabled(boolean bool){
+        getView().findViewById(R.id.one_btn).setEnabled(bool);
+        getView().findViewById(R.id.two_btn).setEnabled(bool);
+        getView().findViewById(R.id.three_btn).setEnabled(bool);
+        getView().findViewById(R.id.four_btn).setEnabled(bool);
+    }
+
     public void correct_log(){
         Log.d("correct_number",String.valueOf(correct_number));
         Log.d("all_number",String.valueOf(all_number));
@@ -301,9 +333,7 @@ public class Quiz2Activity extends Fragment {
     }
 
 
-    public void exit(View v){
-//        finish();
-    }
+
 
 
 }

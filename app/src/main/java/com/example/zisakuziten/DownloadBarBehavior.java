@@ -2,6 +2,7 @@ package com.example.zisakuziten;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -15,6 +16,7 @@ public class DownloadBarBehavior extends CoordinatorLayout.Behavior<LinearLayout
 
     public DownloadBarBehavior(Context context, AttributeSet attrs){
         super(context,attrs);
+        Log.d("DownloadBarBehavior","DownloadBarBehavior");
     }
 
     @Override
@@ -28,6 +30,7 @@ public class DownloadBarBehavior extends CoordinatorLayout.Behavior<LinearLayout
             defaultDependencyTop = dependency.getTop();
         }
         ViewCompat.setTranslationY(linearLayout,-dependency.getTop() + defaultDependencyTop);
+        Log.d("DownloadBarBehavior","View Compad");
         return true;
     }
 }

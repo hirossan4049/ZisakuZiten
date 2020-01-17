@@ -21,11 +21,13 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toolbar;
+import android.widget.Toast;
 import android.widget.ZoomControls;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -77,6 +79,14 @@ public class GroupPiceActivity extends Fragment {
 
 //        mVibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
 
+        //toooooolbarrrrr
+        AppCompatActivity activity = (AppCompatActivity)getActivity();
+        ActionBar actionBar = activity.getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+        setHasOptionsMenu(true);
+        actionBar.setTitle(realm.where(Group.class).equalTo("updateTime",getArguments().getString("updateTime")).findFirst().groupName);
+
         //clickで編集
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -124,17 +134,7 @@ public class GroupPiceActivity extends Fragment {
             }
         });
 
-        //back button onclick
-        view.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment fragment = new GroupActivity();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.frameLayout,fragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
+
 
         //create button onClick
         view.findViewById(R.id.action_button).setOnClickListener(new View.OnClickListener() {
@@ -191,7 +191,19 @@ public class GroupPiceActivity extends Fragment {
 //        return true;
 //    }
 
-
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Fragment fragment = new GroupActivity();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.frameLayout,fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public void create(final String title, final String content){
         Date date = new Date();
@@ -231,6 +243,8 @@ public class GroupPiceActivity extends Fragment {
         Bundle bundle = getArguments();
         RealmList<Ziten> gpList = realm.where(Group.class)
                 .equalTo("updateTime",bundle.getString("updateTime")).findFirst().ziten_updT_List;
+
+
         items = realm.copyFromRealm(gpList);
 //        }
 

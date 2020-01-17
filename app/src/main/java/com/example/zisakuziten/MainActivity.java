@@ -7,6 +7,7 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
     }
 
     // navigation view selected
