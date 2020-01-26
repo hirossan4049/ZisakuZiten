@@ -56,7 +56,7 @@
             android:padding="10dp"
             android:text="サーバーとの応答がありません\nインターネットに接続されて\nいない可能性があります。"
             android:visibility="visible"
-            android:textColor="#000"
+            android:textColor="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -59,6 +59,7 @@ public class DownloadPreviewActivity extends Fragment {
                         groupRe.ziten_updT_List.addAll(group.ziten_updT_List);
                     }
                 });
+                Log.d("DownloadPreviewActivity", String.valueOf(group.ziten_updT_List.size()));
                 Toast.makeText(getContext(),"ダウンロードしたよ！",Toast.LENGTH_LONG).show();
 
 
