@@ -19,7 +19,7 @@
             android:id="@+id/radioButton1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ランダムにクイズ" />
+            android:text="ランダムにクイズ(廃止)" />
 
         <RadioButton
             android:id="@+id/radioButton2"
@@ -31,7 +31,7 @@
             android:id="@+id/radioButton3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="音声で再生" />
+            android:text="音声で再生(開発途中）" />
     </RadioGroup>
 
 

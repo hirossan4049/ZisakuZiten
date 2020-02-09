@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
@@ -56,6 +58,13 @@ public class PlayChoiceActivity extends Fragment {
 //            String group = realm.where(Group.class).equalTo("updateTime",getIntent().getStringExtra("updateTime")).findFirst().groupName;
 //            textView.setText(group);
 //        }
+        //toooooolbarrrrr
+        AppCompatActivity activity = (AppCompatActivity)getActivity();
+        ActionBar actionBar = activity.getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setHomeButtonEnabled(false);
+        setHasOptionsMenu(false);
+        actionBar.setTitle("Play");
 
         displayChar = 0;
         RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
@@ -108,18 +117,35 @@ public class PlayChoiceActivity extends Fragment {
 
                 }else if(displayChar == 2){
                     dialog.dismiss();
+                    if(group.get(position).ziten_updT_List.size() < 4){
+                        new AlertDialog.Builder(getActivity())
+                                .setTitle(group.get(position).groupName)
+                                .setMessage("単語を４つ以上追加してください！")
+                                .setPositiveButton("OK", null)
+                                .show();
+                    }else {
+                        Bundle bundle = new Bundle();
+                        Fragment fragment = new Quiz2Activity();
+                        bundle.putString("updateTime", group.get(position).updateTime);
+                        fragment.setArguments(bundle);
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.frameLayout, fragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
+
+                }else if(displayChar == 3){
+                    dialog.dismiss();
+//                    Toast.makeText(getContext(),"comming soon...",Toast.LENGTH_LONG).show();
+                    dialog.dismiss();
                     Bundle bundle = new Bundle();
-                    Fragment fragment = new Quiz2Activity();
+                    Fragment fragment = new TtsActivity();
                     bundle.putString("updateTime",group.get(position).updateTime);
                     fragment.setArguments(bundle);
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     transaction.replace(R.id.frameLayout,fragment );
                     transaction.addToBackStack(null);
                     transaction.commit();
-
-                }else if(displayChar == 3){
-                    dialog.dismiss();
-                    Toast.makeText(getContext(),"comming soon...",Toast.LENGTH_LONG).show();
                 }else{
                     Toast.makeText(getContext(),"どれか一つを選択してください。",Toast.LENGTH_SHORT).show();
                 }

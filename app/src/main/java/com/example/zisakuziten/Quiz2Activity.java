@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -70,6 +71,8 @@ public class Quiz2Activity extends Fragment {
         View view = inflater.inflate(R.layout.activity_quiz_main,container,false);
         contentText     = (TextView) view.findViewById(R.id.content_text);
 
+
+
         handler = new Handler();
 
         titleText_one   = (TextView)view.findViewById(R.id.title_one);
@@ -102,6 +105,14 @@ public class Quiz2Activity extends Fragment {
         items    = realm.copyFromRealm(results);
         itemsize = items.size();
         sizeZero = 0;
+
+        //toooooolbarrrrr
+        AppCompatActivity activity = (AppCompatActivity)getActivity();
+        ActionBar actionBar = activity.getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setHomeButtonEnabled(false);
+        setHasOptionsMenu(false);
+        actionBar.setTitle("Quiz");
 
 
         main();

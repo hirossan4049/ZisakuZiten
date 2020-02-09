@@ -6,6 +6,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -13,8 +14,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.util.AndroidRuntimeException;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,10 +25,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -33,19 +38,25 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.stream.JsonWriter;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
 
 
 import io.realm.Realm;
@@ -62,6 +73,11 @@ public class GroupActivity extends Fragment {
     public int checkbox_status;
     public List<List> checked_list_data;
     public List<Ziten> checked_list;
+    Group createGroup;
+
+    //permittion
+    String PERMISSION_WRITE_EXTERNAL_STORAGE = "android.permission.WRITE_EXTERNAL_STORAGE";  //ストレージの読み書き権限
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1;    //※番号は任意：onRequestPermissionsResult() で合わせる
 
 
 //    @Override
@@ -82,6 +98,7 @@ public class GroupActivity extends Fragment {
             //0 == GONE ,1 == VISIBLE
             checkbox_status = 0;
             checked_list = new ArrayList<>();
+//            createGroup = new Group();
 
             //toooooolbarrrrr
             AppCompatActivity activity = (AppCompatActivity)getActivity();
@@ -92,14 +109,8 @@ public class GroupActivity extends Fragment {
             actionBar.setTitle("Group");
 
 
-            view.findViewById(R.id.openFile).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.setType("*/*");
-                    startActivityForResult(intent,10);
-                }
-            });
+//            Toolbar toolbar = view.findViewById(R.id.toolbar);
+//            activity.setSupportActionBar(toolbar);
 
 
 
@@ -128,7 +139,7 @@ public class GroupActivity extends Fragment {
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                     final Group group = (Group)parent.getItemAtPosition(position);
 //                    ((Vibrator) getActivity(getContext().VIBRATOR_SERVICE)).vibrate(70);
-                    final String[] items = {"名前変えたい！", "抹殺するんだ!","jsonに出力"};
+                    final String[] items = {"名前を変える", "消去する","jsonに出力"};
                     new AlertDialog.Builder(view.getContext())
                             .setTitle(group.groupName + "をどうするんや？")
                             .setItems(items, new DialogInterface.OnClickListener() {
@@ -145,23 +156,26 @@ public class GroupActivity extends Fragment {
                                         Log.d("AlertDialog", "item2,syoukyo(delete");
                                         delete(group);
                                     }else if(which == 2){
-                                        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-                                        intent.setType("*/*");
-                                        Gson gson = new Gson();
-                                        try {
-                                            Log.d("TOJSON", String.valueOf(getContext().getFilesDir()));
-                                            gson.toJson(group,new FileWriter(getContext().getFilesDir()+"/file2.json"));
-                                            Log.d("GSON",gson.toString());
-                                            Log.d("Group", group.groupName);
-                                            //Group managedModel = realm.copyToRealm(unmanagedModel);
-
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
+                                        //権限確認。
+                                        boolean isGranted = checkPermission(getContext(),PERMISSION_WRITE_EXTERNAL_STORAGE);  //現在のパーミッションをチェック
+                                        Log.d("DebugTag", PERMISSION_WRITE_EXTERNAL_STORAGE + "\nisGranted = " + isGranted);
+                                        createGroup = group;
+                                        if (!isGranted) {
+                                            //パーミッションが付与されてないとき、根拠の説明と要求をする（ダイアログを出す）
+                                            Log.d("DebugTag", PERMISSION_WRITE_EXTERNAL_STORAGE + ", requestCode = " + REQUEST_WRITE_EXTERNAL_STORAGE);
+                                            showPermissionRationaleAndRequest(PERMISSION_WRITE_EXTERNAL_STORAGE, REQUEST_WRITE_EXTERNAL_STORAGE); //API 23 (Android 6.0)
+                                        }else {
+                                            openFileAcitivity();
                                         }
+                                        //onRequestPermissionsResultへ。
 
-                                        intent.putExtra(Intent.EXTRA_TITLE, getContext().getFilesDir()+"/file2.json");
-
-                                        startActivityForResult(intent, 10);
+//                                        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+//                                        intent.setType("*/*");
+//                                        createGroup = group;
+//                                        intent.setType("application/json");
+//                                        intent.putExtra(Intent.EXTRA_TITLE, "Realm.json");
+//
+//                                        startActivityForResult(intent, 11);
                                     }else {
                                     }
                                 }
@@ -181,6 +195,8 @@ public class GroupActivity extends Fragment {
 //        });
             return view;
     }
+
+
 
 
 
@@ -310,26 +326,35 @@ public class GroupActivity extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("onActivityResult",data.getDataString());
+        Log.d("===onActivityResult===","==========onActivityResult=====");
+        Log.d("data",data.getDataString());
+        Log.d("requestsCode", String.valueOf(requestCode));
         try {
+            //====file get contents =====
             if (requestCode == 10 && resultCode == getActivity().RESULT_OK) {
                 String filePath = data.getDataString().replace("content://", "");
                 String decodedfilePath = URLDecoder.decode(data.getDataString(), "utf-8");
 
                 Uri uri = Uri.parse(decodedfilePath);
                 Log.d("PATH1", uri.toString()+"");
-                Log.d("pathdaaaaaa",getPathFromUri(getContext(),uri));
-                gsonRealmSave(getPathFromUri(getContext(),uri));
+//                Log.d("pathdaaaaaa",getPathFromUri(getContext(),uri));
+                gsonRealmOpen(getPathFromUri(getContext(),uri));
+
+                //===file create ====
+            }else if(requestCode == 11 && resultCode == getActivity().RESULT_OK){
+                Uri fileuri = Uri.parse(data.getDataString());
+                String filepath = getPathFromUri(getContext(),fileuri);
+                gsonRealmSave(filepath);
             }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public String getPathFromUri(final Context context, final Uri uri) {
         boolean isAfterKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
         // DocumentProvider
-        Log.e("URI","uri:" + uri.getAuthority());
         if (isAfterKitKat && DocumentsContract.isDocumentUri(context, uri)) {
             if ("com.android.externalstorage.documents".equals(
                     uri.getAuthority())) {// ExternalStorageProvider
@@ -388,17 +413,115 @@ public class GroupActivity extends Fragment {
         return null;
     }
 
-    public void gsonRealmSave(String path){
+    public void gsonRealmOpen(String path){
         Gson gson = new Gson();
         Group object = null;
         try {
             object = gson.fromJson(new FileReader(path), Group.class);
+            final Group finalObject = object;
+            try {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        Group group = realm.createObject(Group.class);
+                        group.groupName = finalObject.groupName;
+                        group.updateTime = finalObject.updateTime;
+                        group.ziten_updT_List.addAll(finalObject.ziten_updT_List);
+                        Toast.makeText(getContext(),"ファイルが正常に読み込めました！",Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }catch (NullPointerException e){
+                    Toast.makeText(getContext(),"ファイルが読めません。",Toast.LENGTH_SHORT).show();
+                }
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            //!ファイルが読めません
+            Toast.makeText(getContext(),"ファイルがありません。",Toast.LENGTH_SHORT).show();
         }
-        Log.d("OBJ",object+"");
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void gsonRealmSave(String filepath){
+        try (JsonWriter writer = new JsonWriter(new FileWriter(filepath))) {
+            writer.setIndent(" ");
+            Gson gson = new Gson();
+            gson.toJson(createGroup, Group.class, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    //==========Permission=============
+
+//https://developer.android.com/training/permissions/requesting#perm-check
+    private boolean checkPermission(Context context, String permission) {
+        final PackageManager pm = getContext().getPackageManager();
+        return pm.checkPermission(permission, getContext().getPackageName()) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    //パーミッションの根拠と要求（API 23 [Android 6.0]）
+//https://developer.android.com/training/permissions/requesting#make-the-request
+    private void showPermissionRationaleAndRequest(final String permission, final int requestCode) {
+        if (android.os.Build.VERSION.SDK_INT >= 23) {  //Android 6.0
+
+            //パーミッション要求の根拠の説明を必要とするか？「今後表示しない」をチェックすると常に false になる。
+            boolean isShouldRationale = shouldShowRequestPermissionRationale(permission); //API 23 (Android 6.0)
+            if (isShouldRationale) {
+                //根拠の説明ダイアログを必要とするとき
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());  //this は Context //※この実装では画面回転で消えるので注意
+                builder.setTitle("以下の理由でストレージの権限が必要です。")
+                        .setMessage("・jsonファイルで出力\n・jsonファイルをインポート")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                requestPermission(permission, requestCode);
+                            }
+                        })
+                        .show();
+            } else {
+                //根拠の説明ダイアログ不要のとき
+                requestPermission(permission, requestCode);
+            }
+        }
+    }
+
+    //パーミッションを要求する（API 23 [Android 6.0]）
+    private void requestPermission(String permission, int requestCode) {
+        if (android.os.Build.VERSION.SDK_INT >= 23) {  //Android 6.0
+            requestPermissions(new String[]{ permission }, requestCode);
+        }
+    }
+
+    //パーミッション要求の結果コールバックハンドラ（API 23 [Android 6.0]）
+//https://developer.android.com/training/permissions/requesting#handle-response
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_WRITE_EXTERNAL_STORAGE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openFileAcitivity();
+                    Toast.makeText(getContext(), "ユーザーによってストレージ読み書き権限が許可されました。", Toast.LENGTH_SHORT).show(); //this は Context
+                } else {
+                    Toast.makeText(getContext(), "ユーザーによってストレージ読み書き権限が拒否されました。", Toast.LENGTH_SHORT).show(); //this は Context
+                }
+                return;
+            }
+        }
+    }
+
+    public void openFileAcitivity(){
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.setType("*/*");
+        intent.setType("application/json");
+        intent.putExtra(Intent.EXTRA_TITLE, createGroup.groupName+".json");
+        startActivityForResult(intent, 11);
+    }
+
+
+
+
 
 
 }

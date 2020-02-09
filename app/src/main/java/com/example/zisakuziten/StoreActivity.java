@@ -15,6 +15,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -73,7 +75,13 @@ public class StoreActivity extends Fragment {
                 android.R.color.holo_red_light);
         //================================================
 
-
+        //toooooolbarrrrr
+        AppCompatActivity activity = (AppCompatActivity)getActivity();
+        ActionBar actionBar = activity.getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setHomeButtonEnabled(false);
+        setHasOptionsMenu(false);
+        actionBar.setTitle("Store");
 
         view.findViewById(R.id.action_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +108,7 @@ public class StoreActivity extends Fragment {
                             @Override
                             public void onResponse(Call<Group> call, Response<Group> response) {
                                 Log.d("StoreActivity","upload成功(Group)"+response.body().apiId);
-
+                                Toast.makeText(getContext(),"現在ファイルがアップロードできません。",Toast.LENGTH_LONG).show();
                                 //Ziten達をPOST
 //                                Call <Ziten> zitenCall = service.saveZPost()
                             }
@@ -119,7 +127,11 @@ public class StoreActivity extends Fragment {
             }//!
         });
 
-
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Store")
+                .setMessage("ストアはまだ開発途中なので利用できません。次のアップデートに期待しましょう！")
+                .setPositiveButton("OK", null)
+                .show();
 
 
         Retrofit retrofit = new Retrofit.Builder()
