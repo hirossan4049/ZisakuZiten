@@ -207,7 +207,7 @@ public class GroupPiceActivity extends Fragment {
 
     public void create(final String title, final String content){
         Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss", Locale.JAPANESE);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.JAPANESE);
         final String updateTime = sdf.format(date);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
