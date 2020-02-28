@@ -26,12 +26,17 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
@@ -133,22 +138,49 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("===onActivityResult===", "==========onActivityResult=====");
+        Log.d("===MAINACTIVITY===", "==========onActivityResult=====");
         Log.d("data", data.getDataString());
         Log.d("requestsCode", String.valueOf(requestCode));
-        try {
-            //====file get contents =====
-            if (requestCode == 10 && resultCode == this.RESULT_OK) {
-                String filePath = data.getDataString().replace("content://", "");
-                String decodedfilePath = URLDecoder.decode(data.getDataString(), "utf-8");
+        //====file get contents =====
+        if (requestCode == 10 && resultCode == RESULT_OK) {
+//                String filePath = data.getDataString().replace("content://", "");
+//                String decodedfilePath = URLDecoder.decode(filePath, "utf-8");
+//                File file = new File(decodedfilePath);
+//                Uri uri = Uri.parse(decodedfilePath);
+            InputStream inputStream = null;
 
-                Uri uri = Uri.parse(decodedfilePath);
-                Log.d("PATH1", uri.toString() + "");
-//                Log.d("pathdaaaaaa",getPathFromUri(this,uri));
-                gsonRealmOpen(getPathFromUri(this, uri));
+            Uri uri = Uri.parse(data.getDataString());
+
+            try {
+                inputStream = getContentResolver().openInputStream(uri);
+
+                JsonReader jsonReader = new JsonReader( new InputStreamReader( inputStream ) );
+//                    Log.d("fileread",group.toString()+"");
+//                        object = gson.fromJson(new FileReader(String.valueOf(inputStream)), Group.class);
+//                        Log.d("MAINACTIVITYOBJ",object.groupName);
+//                        final Group finalObject = object;
+                try {
+                    final Group group = new Gson().fromJson(jsonReader, Group.class);
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            Group newgroup = realm.createObject(Group.class);
+                            newgroup.groupName = group.groupName;
+                            newgroup.updateTime = group.updateTime;
+                            newgroup.ziten_updT_List.addAll(group.ziten_updT_List);
+                            Toast.makeText(MainActivity.this, "ファイルが正常に読み込めました！", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } catch (NullPointerException e) {
+                    Toast.makeText(MainActivity.this, "ファイルが読めません。", Toast.LENGTH_SHORT).show();
+                } catch (Exception e){
+                    Toast.makeText(MainActivity.this,"ファイルが壊れています。",Toast.LENGTH_SHORT).show();
+                }
+
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
         }
     }
 

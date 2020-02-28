@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ZisakuZiten</string>
+    <string name="app_name">自作辞典</string>
 
     <string-array name="speedspnnerlist">
         <item>1.0</item>
