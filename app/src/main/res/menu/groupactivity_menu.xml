@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:title="Import Json to Group"
+        android:title="@string/text_import_json"
         android:id="@+id/import_group"
         android:icon="@drawable/ic_delete"
         />
     <item
-        android:title="setting"
+        android:title="@string/text_settings"
         android:id="@+id/setting"
         android:icon="@drawable/ic_delete"
         />

@@ -17,6 +17,29 @@
     <!--android:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>-->
 
 
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/shape_rounded_corners_20dp"
+        android:drawableLeft="@drawable/search_black"
+        android:ems="10"
+        android:hapticFeedbackEnabled="true"
+        android:hint="@string/text_search"
+        android:inputType="textPersonName"
+        android:isScrollContainer="false"
+        android:paddingLeft="5dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColorHint="#AFAFAF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <FrameLayout
         android:id="@+id/frameLayout2"
         android:layout_width="0dp"
@@ -24,7 +47,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/editText2">
 
 
         <ListView

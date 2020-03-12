@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ZisakuZiten</string>
+    <string name="text_create">创建</string>
+    <string name="text_group">组</string>
+    <string name="text_home">家</string>
+    <string name="text_import_json">导入Json</string>
+    <string name="text_search">搜索</string>
+    <string name="text_settings">设定</string>
+    <string name="text_store">商店</string>
+    <string name="text_title">标题</string>
+    <string name="text_play">Play</string>
+</resources>

@@ -15,10 +15,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -37,16 +40,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonWriter;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,9 +61,9 @@ public class GroupActivity extends Fragment {
     public Realm realm;
     public ListView listView;
     public CheckBox checkBox;
-    public FloatingActionButton action_button;
+//    public FloatingActionButton action_button;
     public int checkbox_status;
-    public List<List> checked_list_data;
+//    public List<List> checked_list_data;
     public List<Ziten> checked_list;
     Group createGroup;
 
@@ -129,7 +127,7 @@ public class GroupActivity extends Fragment {
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setHomeButtonEnabled(false);
         setHasOptionsMenu(false);
-        actionBar.setTitle("Group");
+        actionBar.setTitle(R.string.text_group);
 
 
 //            Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -227,9 +225,20 @@ public class GroupActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d("actionbutton", "onclick");
-                final Dialog dialog = new Dialog(getActivity());
+                final Dialog dialog = new Dialog(getActivity(), R.style.TransparentDialogTheme);
+//                final Dialog dialog = new Dialog(getActivity(), R.style.TransparentDialogTheme);
                 dialog.setContentView(R.layout.group_create_dialog);
-                dialog.setTitle("hellllllo");
+
+                DisplayMetrics metrics = getResources().getDisplayMetrics();
+                int dialogWidth = (int) (metrics.widthPixels * 0.95);
+
+                WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+                lp.width = dialogWidth;
+                dialog.getWindow().setAttributes(lp);
+                dialog.getWindow().setGravity(Gravity.BOTTOM);
+
+
+                //create
                 Button createBtn = dialog.findViewById(R.id.create);
                 createBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -251,6 +260,13 @@ public class GroupActivity extends Fragment {
                             }
                         });
                         setGroupList();
+                        dialog.dismiss();
+                    }
+                });
+                //cancel
+                dialog.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
                         dialog.dismiss();
                     }
                 });

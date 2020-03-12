@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <ProgressBar
-        android:id="@+id/progressBar2"
+        android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -29,10 +29,10 @@
         app:srcCompat="@drawable/ic_pause"
         tools:ignore="VectorDrawableCompat" />
 
-    <ImageView
-        android:id="@+id/imageView3"
+    <ImageButton
+        android:id="@+id/nextbutton"
         android:layout_width="65dp"
-        android:layout_height="52dp"
+        android:layout_height="60dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/playpauseBtm"
@@ -41,10 +41,10 @@
         app:srcCompat="@drawable/ic_skip_next"
         tools:ignore="VectorDrawableCompat" />
 
-    <ImageView
-        android:id="@+id/imageView4"
+    <ImageButton
+        android:id="@+id/backbutton"
         android:layout_width="65dp"
-        android:layout_height="52dp"
+        android:layout_height="60dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/playpauseBtm"
@@ -71,38 +71,38 @@
         android:layout_marginLeft="16dp"
         android:text="Gegege hotsu"
         android:textSize="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/progressBar2"
+        app:layout_constraintBottom_toTopOf="@+id/progressBar"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/nowIndex"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:text="3/24"
-        app:layout_constraintBottom_toTopOf="@+id/progressBar2"
+        app:layout_constraintBottom_toTopOf="@+id/progressBar"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/imageView5"
         android:layout_width="54dp"
-        android:layout_height="33dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
-        app:layout_constraintEnd_toStartOf="@+id/imageView4"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/backbutton"
+        app:layout_constraintEnd_toStartOf="@+id/backbutton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar2"
+        app:layout_constraintTop_toBottomOf="@+id/progressBar"
         app:srcCompat="@drawable/ic_repeat"
         tools:ignore="VectorDrawableCompat" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/imageView6"
         android:layout_width="54dp"
-        android:layout_height="33dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/nextbutton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
-        app:layout_constraintTop_toTopOf="@+id/imageView3"
+        app:layout_constraintStart_toEndOf="@+id/nextbutton"
+        app:layout_constraintTop_toTopOf="@+id/nextbutton"
         app:srcCompat="@drawable/ic_shuffle"
         tools:ignore="VectorDrawableCompat" />
 

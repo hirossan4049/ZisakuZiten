@@ -1,8 +1,11 @@
 package com.example.zisakuziten;
 
+import android.app.Notification;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
@@ -10,13 +13,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
+import android.widget.RemoteViews;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.json.JSONException;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -30,8 +39,11 @@ public class TtsActivity extends Fragment implements TextToSpeech.OnInitListener
 
     TextView grouptitle;
     TextView zitentitle;
+    TextView nowIndex;
+    ProgressBar progressBar;
 
     boolean ttsStatus;
+    boolean playTitle;
 
     TextToSpeech tts;
     //true play false pause;
@@ -40,7 +52,9 @@ public class TtsActivity extends Fragment implements TextToSpeech.OnInitListener
 
     Realm realm;
     Group group;
+
     int groupIndex;
+    int groupsize;
     Locale titleLocale;
     Locale contentLocale;
 
@@ -54,18 +68,29 @@ public class TtsActivity extends Fragment implements TextToSpeech.OnInitListener
 
         grouptitle = view.findViewById(R.id.grouptitle);
         zitentitle = view.findViewById(R.id.zitentitle);
+        nowIndex = view.findViewById(R.id.nowIndex);
+        progressBar = view.findViewById(R.id.progressBar);
 
         tts = new TextToSpeech(getContext(),this);
         ttsStatus = false;
+        playTitle = false;
         realm = Realm.getDefaultInstance();
 
-        group = realm.where(Group.class).equalTo("updateTime",getArguments().getString("updateTime")).findFirst();
+        Group cashe_group = realm.where(Group.class).equalTo("updateTime",getArguments().getString("updateTime")).findFirst();
+        group = realm.copyFromRealm(cashe_group);
+
         grouptitle.setText(group.groupName);
         groupIndex = 0;
+        groupsize = group.ziten_updT_List.size();
         playpause = false;
+
+        progressBar.setMax(groupsize);
 
         titleLocale = Locale.JAPANESE;
         contentLocale = Locale.JAPANESE;
+
+        notific();
+
 
         playpauseBtn = (FloatingActionButton) view.findViewById(R.id.playpauseBtm);
         playpauseBtn.setOnClickListener(new View.OnClickListener() {
@@ -75,11 +100,35 @@ public class TtsActivity extends Fragment implements TextToSpeech.OnInitListener
                     Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pause, null);
                     playpauseBtn.setImageDrawable(drawable);
                     playpause = false;
+                    playGroup();
+
                 }else if(playpause == false){
                     Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play, null);
                     playpauseBtn.setImageDrawable(drawable);
                     playpause = true;
+                    tts.stop();
                 }
+            }
+        });
+
+        //next and back
+        view.findViewById(R.id.nextbutton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tts.stop();
+//                groupIndex ++;
+                playGroup();
+            }
+        });
+        view.findViewById(R.id.backbutton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tts.stop();
+                groupIndex --;
+                if (groupIndex <= 0){
+                    groupIndex = groupsize;
+                }
+                playGroup();
             }
         });
 
@@ -178,7 +227,8 @@ public class TtsActivity extends Fragment implements TextToSpeech.OnInitListener
                 @Override
                 public void onDone(String utteranceId) {
                     ttsStatus = false;
-                    Log.i("TextToSpeech","On Done");
+                    playGroup();
+                    Log.i("TextToSpeech","On どーん、どーん");
                 }
 
                 @Override
@@ -192,45 +242,52 @@ public class TtsActivity extends Fragment implements TextToSpeech.OnInitListener
             Log.e("","Error Init");
         }
         playGroup();
-        playGroup();
-        playGroup();
-        playGroup();
-        playGroup();
     }
+
 
     public void playGroup(){
-        if(groupIndex >= group.ziten_updT_List.size()){
+        Log.d("groupIndex", String.valueOf(groupIndex));
+        if(groupIndex >= groupsize){
             groupIndex = 0;
         }
+        final Handler mainHandler = new Handler(Looper.getMainLooper());
+        // メインスレッド以外でUI変更したらだめらしい（）
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                nowIndex.setText(groupIndex + 1 + "/" + groupsize);
+                progressBar.setProgress(groupIndex + 1);
+            }
+        });
+
         Log.d("groupIndex", String.valueOf(groupIndex));
         Ziten ziten = group.ziten_updT_List.get(groupIndex);
-        Log.d("while","while ↓");
-//        while(true){
-//            if(ttsStatus){
-////                Log.d("while","isspeaking");
-//
-//            }else {
-//                zitentitle.setText(ziten.title);
-//                Log.d("while","is not speaking");
-//                speakText(ziten.title,titleLocale);
-////                speakText(ziten.content,contentLocale);
-//                break;
-//            }
-//        }
-//        groupIndex ++;
 
-        Log.d("while","is not speaking");
-        speakText(ziten.title,titleLocale);
-        ttswait();
-        speakText(ziten.content,contentLocale);
-        groupIndex ++;
-        ttswait();
+        if (playTitle){
+            speakText(ziten.content,titleLocale);
+            groupIndex ++;
+            playTitle = false;
+        }else {
+            speakText(ziten.title, contentLocale);
+            playTitle = true;
+        }
+//        speakText(String.valueOf(groupIndex),titleLocale);
+//        ttswait();
+//        speakText(ziten.content,contentLocale);
+//        ttswait();
 
     }
 
-    public void speakText(String text,Locale locale){
+    public void speakText(final String text, Locale locale){
         tts.setLanguage(locale);
-        zitentitle.setText(text);
+        final Handler mainHandler = new Handler(Looper.getMainLooper());
+        // メインスレッド以外でUI変更したらだめらしい（）
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                zitentitle.setText(text);
+            }
+        });
 
         Log.d("speakText",text);
         if(Build.VERSION.SDK_INT >= 21){
@@ -243,21 +300,41 @@ public class TtsActivity extends Fragment implements TextToSpeech.OnInitListener
         }
     }
 
-    public synchronized int ttswait() {
-        while (ttsStatus) {
-            try {
-                wait(1000);          // プロデューサからの notify()呼び出しを待つ
-            } catch (InterruptedException e) {
-            }
-        }
-        notify();
-        return 0;
-    }
+//    public synchronized int ttswait() {
+//        while (ttsStatus) {
+//            try {
+//                wait(100);          // プロデューサからの notify()呼び出しを待つ
+//            } catch (InterruptedException e) {
+//            }
+//        }
+//        notify();
+//        return 0;
+//    }
 
     //speak speed
     private void setSpeechRate(float rate){
         if(null != tts){
             tts.setSpeechRate(rate);
         }
+    }
+
+
+    public void notific(){
+        // Get the layouts to use in the custom notification
+        RemoteViews notificationLayout = new RemoteViews(getContext().getPackageName(), R.layout.notification_small);
+        RemoteViews notificationLayoutExpanded = new RemoteViews(getContext().getPackageName(), R.layout.notification_small);
+
+        notificationLayout.setTextViewText(R.id.notification_title,"たいとる");
+        notificationLayoutExpanded.setTextViewText(R.id.notification_title,"たいとる");
+
+        // Apply the layouts to the notification
+        Notification customNotification = new NotificationCompat.Builder(getContext(), "1")
+                .setSmallIcon(R.drawable.ic_play)
+                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                .setCustomContentView(notificationLayout)
+                .setCustomBigContentView(notificationLayoutExpanded)
+                .build();
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
+        notificationManager.notify(1, customNotification);
     }
 }

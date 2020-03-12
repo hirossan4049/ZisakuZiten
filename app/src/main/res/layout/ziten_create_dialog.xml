@@ -5,6 +5,17 @@
     android:orientation="vertical"
     android:padding="15dp">
 
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="辞典を作成"
+        android:textSize="20dp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="15dp" />
+
     <EditText
         android:id="@+id/titleEdit"
         android:layout_width="match_parent"

@@ -3,12 +3,12 @@
     <item
         android:id="@+id/home"
         android:icon="@drawable/ic_list_add"
-        android:title="Home" />
+        android:title="@string/text_home" />
 
     <item
         android:id="@+id/quiz"
         android:icon="@drawable/ic_quiz"
-        android:title="Play" />
+        android:title="@string/text_play" />
 
 <!--    <item-->
 <!--        android:id="@+id/label"-->
@@ -18,6 +18,6 @@
     <item
         android:id="@+id/store"
         android:icon="@drawable/ic_store"
-        android:title="Store"/>
+        android:title="@string/text_store"/>
 
 </menu>
