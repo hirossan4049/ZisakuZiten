@@ -3,9 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="15dp">
+    android:padding="15dp"
+    android:background="@drawable/shape_rounded_corners_10dp">
 
-    <TextView
+
+<TextView
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="30dp"
@@ -21,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="title"
+        android:hint="@string/text_title"
         android:inputType="textPersonName" />
 
     <EditText
@@ -29,18 +31,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="content"
+        android:hint="@string/text_content"
         android:inputType="textPersonName" />
 
-    <Button
-        android:id="@+id/add"
+    <Space
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="add" />
+        android:layout_height="25dp" />
 
-    <Button
-        android:id="@+id/next"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="追加して次へ" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@android:string/cancel" />
+
+        <Button
+            android:id="@+id/add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/text_create" />
+
+        <Button
+            android:id="@+id/next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/text_create_next" />
+    </LinearLayout>
+
 </LinearLayout>

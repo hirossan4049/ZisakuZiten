@@ -8,12 +8,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -142,8 +145,16 @@ public class GroupPiceActivity extends Fragment {
             public void onClick(View v) {
             if (checkbox_status == false) {
 
-                final Dialog dialog = new Dialog(getActivity());
+                final Dialog dialog = new Dialog(getActivity(),R.style.TransparentDialogTheme);
                 dialog.setContentView(R.layout.ziten_create_dialog);
+                DisplayMetrics metrics = getResources().getDisplayMetrics();
+                int dialogWidth = (int) (metrics.widthPixels * 0.95);
+
+                WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+                lp.width = dialogWidth;
+                dialog.getWindow().setAttributes(lp);
+                dialog.getWindow().setGravity(Gravity.BOTTOM);
+
                 dialog.setTitle("辞典を作成");
                 Button addBtn = dialog.findViewById(R.id.add);
                 addBtn.setOnClickListener(new View.OnClickListener() {
@@ -167,10 +178,19 @@ public class GroupPiceActivity extends Fragment {
                         String title = titleEdit.getText().toString();
                         String content = contentEdit.getText().toString();
                         create(title,content);
+                        setMemoList();
                         titleEdit.setText("");
                         contentEdit.setText("");
                     }
                 });
+                Button cancelbtn = dialog.findViewById(R.id.cancel);
+                cancelbtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
                 dialog.show();
 
             }else if(checkbox_status == true){

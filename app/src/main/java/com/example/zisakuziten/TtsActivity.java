@@ -1,6 +1,9 @@
 package com.example.zisakuziten;
 
 import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -324,8 +327,13 @@ public class TtsActivity extends Fragment implements TextToSpeech.OnInitListener
         RemoteViews notificationLayout = new RemoteViews(getContext().getPackageName(), R.layout.notification_small);
         RemoteViews notificationLayoutExpanded = new RemoteViews(getContext().getPackageName(), R.layout.notification_small);
 
-        notificationLayout.setTextViewText(R.id.notification_title,"たいとる");
-        notificationLayoutExpanded.setTextViewText(R.id.notification_title,"たいとる");
+        notificationLayout.setTextViewText(R.id.notification_title,"テスト");
+        notificationLayoutExpanded.setTextViewText(R.id.notification_title,"TEST");
+
+        Intent intent = new Intent("playORpause");
+        PendingIntent pendingIntent = PendingIntent.getActivity(this.getContext(), 1, intent, 0);
+        notificationLayout.setOnClickPendingIntent(R.id.play,pendingIntent);
+
 
         // Apply the layouts to the notification
         Notification customNotification = new NotificationCompat.Builder(getContext(), "1")
@@ -333,8 +341,15 @@ public class TtsActivity extends Fragment implements TextToSpeech.OnInitListener
                 .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                 .setCustomContentView(notificationLayout)
                 .setCustomBigContentView(notificationLayoutExpanded)
+                .setAutoCancel(false)
                 .build();
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
         notificationManager.notify(1, customNotification);
     }
+
+
+
+
+
+
 }

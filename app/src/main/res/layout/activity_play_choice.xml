@@ -31,7 +31,7 @@
             android:id="@+id/radioButton3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="音声で再生(開発途中）" />
+            android:text="音声で再生(beta）" />
     </RadioGroup>
 
 

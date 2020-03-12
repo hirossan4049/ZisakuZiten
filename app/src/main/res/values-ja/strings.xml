@@ -24,4 +24,6 @@
     <string name="text_create">作成</string>
     <string name="text_title">タイトル</string>
     <string name="text_group">Group</string>
+    <string name="text_content">意味</string>
+    <string name="text_create_next">次へ</string>
 </resources>
